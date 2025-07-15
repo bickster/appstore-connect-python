@@ -9,7 +9,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
     requirements = [line.strip() for line in fh if line.strip() and not line.startswith("#")]
 
 setup(
-    name="appstore-connect-client",
+    name="apple-appstore-connect-client",
     version="0.1.0",
     author="Chris Bick",
     author_email="chris@bickster.com",
