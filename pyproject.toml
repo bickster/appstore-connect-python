@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "appstore-connect-client"
+version = "0.1.0"
+description = "A comprehensive Python client for the Apple App Store Connect API"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Chris Bick", email = "chris@bickster.com"}
+]
+keywords = ["apple", "app store connect", "api", "sales", "metadata", "ios", "apps"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "requests>=2.31.0",
+    "pandas>=2.0.0",
+    "PyJWT>=2.8.0",
+    "cryptography>=41.0.0",
+    "python-dateutil>=2.8.0",
+    "ratelimit>=2.2.1",
+]
+
+[project.urls]
+Homepage = "https://github.com/chrisbick/appstore-connect-client"
+Documentation = "https://appstore-connect-client.readthedocs.io/"
+Repository = "https://github.com/chrisbick/appstore-connect-client"
+"Bug Tracker" = "https://github.com/chrisbick/appstore-connect-client/issues"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "pytest-mock>=3.11.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+]
+
+[tool.setuptools.packages.find]
+include = ["appstore_connect*"]
+
+[tool.black]
+line-length = 88
+target-version = ['py37']
+
+[tool.mypy]
+python_version = "3.7"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
