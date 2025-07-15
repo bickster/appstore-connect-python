@@ -54,22 +54,22 @@ rm src/appstore_connect/__init__.py.bak
 
 # Run tests
 echo -e "${YELLOW}Running tests...${NC}"
-pytest
+python3 -m pytest
 
 # Run linting
 echo -e "${YELLOW}Running black formatter check...${NC}"
-black --check src/appstore_connect tests
+python3 -m black --check src/appstore_connect tests
 
 echo -e "${YELLOW}Running flake8...${NC}"
-flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503
+python3 -m flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503
 
 echo -e "${YELLOW}Running mypy...${NC}"
-mypy src/appstore_connect
+python3 -m mypy src/appstore_connect
 
 # Build the package
 echo -e "${YELLOW}Building package...${NC}"
 rm -rf dist/ build/ *.egg-info
-python -m build
+python3 -m build
 
 # Commit version changes
 echo -e "${YELLOW}Committing version changes...${NC}"
