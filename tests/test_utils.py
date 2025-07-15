@@ -148,7 +148,9 @@ class TestDateHandling:
         """Test normalizing from datetime object."""
         test_datetime = datetime(2023, 1, 15, 10, 30, 0)
         expected_date = date(2023, 1, 15)
-        assert normalize_date(test_datetime) == expected_date
+        result = normalize_date(test_datetime)
+        assert result == expected_date
+        assert isinstance(result, date)
     
     def test_normalize_date_from_string_iso(self):
         """Test normalizing from ISO string."""
@@ -196,7 +198,7 @@ class TestStringUtils:
     def test_sanitize_app_name_normal(self):
         """Test sanitizing normal app name."""
         assert sanitize_app_name("My Great App") == "My_Great_App"
-        assert sanitize_app_name("Health & Fitness") == "Health__Fitness"
+        assert sanitize_app_name("Health & Fitness") == "Health_Fitness"
     
     def test_sanitize_app_name_special_chars(self):
         """Test sanitizing app name with special characters."""

@@ -20,12 +20,13 @@ from appstore_connect.exceptions import (
 @pytest.fixture
 def api_client():
     """Create a test API client instance."""
-    return AppStoreConnectAPI(
-        key_id="test_key",
-        issuer_id="test_issuer",
-        private_key_path="/tmp/test_key.p8",
-        vendor_number="12345"
-    )
+    with patch('pathlib.Path.exists', return_value=True):
+        return AppStoreConnectAPI(
+            key_id="test_key",
+            issuer_id="test_issuer",
+            private_key_path="/tmp/test_key.p8",
+            vendor_number="12345"
+        )
 
 
 @pytest.fixture

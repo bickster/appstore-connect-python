@@ -269,8 +269,8 @@ def sanitize_app_name(name: str) -> str:
     # Replace multiple spaces with single space
     sanitized = re.sub(r'\s+', ' ', sanitized)
     
-    # Replace spaces with underscores for identifier usage
-    sanitized = sanitized.replace(' ', '_')
+    # Replace multiple spaces/underscores with single underscore
+    sanitized = re.sub(r'[\s_]+', '_', sanitized)
     
     # Limit length
     if len(sanitized) > 50:

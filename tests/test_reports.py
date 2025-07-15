@@ -149,11 +149,12 @@ class TestReportProcessor:
         """Test period comparison."""
         # Mock get_sales_summary to return different data for different periods
         def mock_get_sales_summary(start_date=None, end_date=None, **kwargs):
-            if start_date and start_date.month == 1:  # Current period
+            # Use different logic to distinguish periods
+            if start_date and start_date >= date(2023, 1, 15):  # Current period (more recent)
                 return {
                     'summary': {'total_units': 100, 'total_revenue': 50.0, 'unique_apps': 2}
                 }
-            else:  # Comparison period
+            else:  # Comparison period (older)
                 return {
                     'summary': {'total_units': 80, 'total_revenue': 40.0, 'unique_apps': 2}
                 }
@@ -221,7 +222,14 @@ class TestReportProcessor:
         """Test ranking with invalid metric."""
         from appstore_connect.exceptions import ValidationError
         
-        with patch.object(report_processor, 'get_sales_summary', return_value={'by_app': {}}):
+        # Mock a summary with some data
+        mock_summary = {
+            'by_app': {
+                '123': {'name': 'App A', 'revenue': 100.0, 'units': 50, 'countries': 3}
+            }
+        }
+        
+        with patch.object(report_processor, 'get_sales_summary', return_value=mock_summary):
             with pytest.raises(ValidationError):
                 report_processor.get_app_performance_ranking(days=30, metric='invalid')
     
