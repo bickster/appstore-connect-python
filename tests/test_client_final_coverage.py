@@ -132,18 +132,32 @@ class TestRemainingClientCoverage:
     
     def test_get_current_metadata_permission_errors_in_app_info(self, api_client):
         """Test lines 741-742: PermissionError handling in app info section."""
-        # First call succeeds
+        # First call succeeds (get_app_info)
         app_info_response = Mock()
         app_info_response.status_code = 200
         app_info_response.json.return_value = {
             'data': {'attributes': {'name': 'Test App', 'bundleId': 'com.test.app'}}
         }
         
-        # Second call raises PermissionError
+        # Second call raises PermissionError (get_app_localizations)
         app_infos_error = Mock()
         app_infos_error.status_code = 403
         
-        responses = [app_info_response, app_infos_error]
+        # Third call succeeds (get_app_store_versions)
+        versions_response = Mock()
+        versions_response.status_code = 200
+        versions_response.json.return_value = {
+            'data': [{'id': 'version123', 'attributes': {'versionString': '1.0.0'}}]
+        }
+        
+        # Fourth call succeeds (get_app_store_version_localizations)
+        version_localizations_response = Mock()
+        version_localizations_response.status_code = 200
+        version_localizations_response.json.return_value = {
+            'data': [{'attributes': {'locale': 'en-US', 'description': 'Test description'}}]
+        }
+        
+        responses = [app_info_response, app_infos_error, versions_response, version_localizations_response]
         
         with patch.object(api_client, '_make_request', side_effect=responses):
             metadata = api_client.get_current_metadata("123456")
@@ -152,8 +166,10 @@ class TestRemainingClientCoverage:
             assert metadata['app_info']['name'] == 'Test App'
             # Should have empty localizations due to permission error
             assert metadata['app_localizations'] == {}
-            assert metadata['version_info'] == {}
-            assert metadata['version_localizations'] == {}
+            # Should have version info
+            assert metadata['version_info']['versionString'] == '1.0.0'
+            # Should have version localizations
+            assert 'en-US' in metadata['version_localizations']
     
     def test_get_current_metadata_not_found_in_versions(self, api_client):
         """Test lines 759-760: NotFoundError handling in version section."""
