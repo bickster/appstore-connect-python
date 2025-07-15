@@ -82,7 +82,8 @@ addopts = [
 markers = [
     "unit: Unit tests",
     "integration: Integration tests",
-    "slow: Slow running tests"
+    "slow: Slow running tests",
+    "timeout: Tests with custom timeout"
 ]
 filterwarnings = [
     "ignore::DeprecationWarning",
