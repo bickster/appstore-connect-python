@@ -245,7 +245,7 @@ class AppStoreConnectAPI:
         # Apple returns gzipped TSV data
         try:
             with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as gz:
-                df = pd.read_csv(gz, sep='\\t')
+                df = pd.read_csv(gz, sep='\t', engine='python')
         except Exception as e:
             raise AppStoreConnectError(f"Failed to parse report data: {e}")
         
@@ -290,7 +290,7 @@ class AppStoreConnectAPI:
         
         try:
             with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as gz:
-                df = pd.read_csv(gz, sep='\\t')
+                df = pd.read_csv(gz, sep='\t', engine='python')
             return df
         except Exception as e:
             raise AppStoreConnectError(f"Failed to parse financial report: {e}")
@@ -432,9 +432,13 @@ class AppStoreConnectAPI:
     
     def get_apps(self) -> Optional[Dict]:
         """Get all apps for the account."""
-        response = self._make_request(method="GET", endpoint="/apps")
-        if response.status_code == 200:
-            return response.json()
+        try:
+            response = self._make_request(method="GET", endpoint="/apps")
+            if response.status_code == 200:
+                return response.json()
+        except PermissionError:
+            # API key doesn't have metadata permissions
+            return None
         return None
     
     def get_app_info(self, app_id: str) -> Optional[Dict]:
@@ -715,34 +719,44 @@ class AppStoreConnectAPI:
             'version_localizations': {}
         }
         
-        # Get basic app info
-        app_info = self.get_app_info(app_id)
-        if app_info and 'data' in app_info:
-            metadata['app_info'] = app_info['data']['attributes']
+        try:
+            # Get basic app info
+            app_info = self.get_app_info(app_id)
+            if app_info and 'data' in app_info:
+                metadata['app_info'] = app_info['data']['attributes']
+        except (PermissionError, NotFoundError):
+            # Return empty metadata if no permissions
+            return metadata
         
         # Get app info localizations (name, subtitle, privacy policy)
-        app_infos = self.get_app_infos(app_id)
-        if app_infos and 'data' in app_infos and app_infos['data']:
-            app_info_id = app_infos['data'][0]['id']
-            localizations = self.get_app_info_localizations(app_info_id)
-            if localizations and 'data' in localizations:
-                for loc in localizations['data']:
-                    locale = loc['attributes']['locale']
-                    metadata['app_localizations'][locale] = loc['attributes']
+        try:
+            app_infos = self.get_app_infos(app_id)
+            if app_infos and 'data' in app_infos and app_infos['data']:
+                app_info_id = app_infos['data'][0]['id']
+                localizations = self.get_app_info_localizations(app_info_id)
+                if localizations and 'data' in localizations:
+                    for loc in localizations['data']:
+                        locale = loc['attributes']['locale']
+                        metadata['app_localizations'][locale] = loc['attributes']
+        except (PermissionError, NotFoundError):
+            pass
         
         # Get version info
-        versions = self.get_app_store_versions(app_id)
-        if versions and 'data' in versions:
-            # Get the most recent version
-            if versions['data']:
-                latest_version = versions['data'][0]
-                metadata['version_info'] = latest_version['attributes']
-                
-                # Get version localizations
-                version_localizations = self.get_app_store_version_localizations(latest_version['id'])
-                if version_localizations and 'data' in version_localizations:
-                    for loc in version_localizations['data']:
-                        locale = loc['attributes']['locale']
-                        metadata['version_localizations'][locale] = loc['attributes']
+        try:
+            versions = self.get_app_store_versions(app_id)
+            if versions and 'data' in versions:
+                # Get the most recent version
+                if versions['data']:
+                    latest_version = versions['data'][0]
+                    metadata['version_info'] = latest_version['attributes']
+                    
+                    # Get version localizations
+                    version_localizations = self.get_app_store_version_localizations(latest_version['id'])
+                    if version_localizations and 'data' in version_localizations:
+                        for loc in version_localizations['data']:
+                            locale = loc['attributes']['locale']
+                            metadata['version_localizations'][locale] = loc['attributes']
+        except (PermissionError, NotFoundError):
+            pass
         
         return metadata

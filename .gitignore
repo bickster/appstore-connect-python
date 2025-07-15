@@ -108,17 +108,48 @@ venv.bak/
 .dmypy.json
 dmypy.json
 
-# API credentials
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Private keys and certificates
+config/
+*.pem
 *.p8
 *.key
-*.pem
+*.crt
+*.cer
 
 # IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Test credentials
+test_credentials.json
+
+# PyPI configuration
+.pypirc
+!.pypirc.template
+
+# Additional Python
+*.py,cover
+pip-wheel-metadata/
+share/python-wheels/
+db.sqlite3-journal
+.scrapy
+celerybeat.pid
+.pyre/
+ipython_config.py
+.ropeproject
+__pypackages__/
+*.sage.py
+pipenv/
+Pipfile.lock

@@ -10,7 +10,7 @@ This example demonstrates how to:
 """
 
 import os
-from appstore_connect import AppStoreConnectAPI
+from appstore_connect.client import AppStoreConnectAPI
 from appstore_connect.exceptions import AppStoreConnectError, ValidationError, PermissionError
 
 def main():

@@ -11,7 +11,7 @@ This example demonstrates how to:
 
 import os
 from datetime import date, timedelta
-from appstore_connect import create_report_processor
+from appstore_connect.reports import create_report_processor
 from appstore_connect.exceptions import AppStoreConnectError
 
 def main():

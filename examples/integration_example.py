@@ -13,13 +13,9 @@ This example demonstrates:
 import os
 import pandas as pd
 from datetime import date, timedelta
-from appstore_connect import (
-    AppStoreConnectAPI,
-    ReportProcessor,
-    MetadataManager,
-    create_report_processor,
-    create_metadata_manager
-)
+from appstore_connect.client import AppStoreConnectAPI
+from appstore_connect.reports import ReportProcessor, create_report_processor
+from appstore_connect.metadata import MetadataManager, create_metadata_manager
 from appstore_connect.exceptions import AppStoreConnectError
 
 
@@ -215,12 +211,12 @@ def migration_guide_example():
     print("Migration from BicksterAppStoreSales AppStoreConnectAPI:")
     print()
     print("BEFORE (BicksterAppStoreSales):")
-    print("  from src.connectors.app_store_connect import AppStoreConnectAPI")
+    print("  from appstore_connect.connectors.app_store_connect import AppStoreConnectAPI")
     print("  api = AppStoreConnectAPI()")
     print("  sales_df = api.get_sales_report(date.today())")
     print()
     print("AFTER (appstore-connect-client):")
-    print("  from appstore_connect import AppStoreConnectAPI")
+    print("  from appstore_connect.client import AppStoreConnectAPI")
     print("  api = AppStoreConnectAPI(key_id, issuer_id, private_key_path, vendor_number)")
     print("  sales_df = api.get_sales_report(date.today())  # Same method!")
     print()

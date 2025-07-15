@@ -148,13 +148,15 @@ class TestReportProcessor:
     def test_compare_periods(self, report_processor):
         """Test period comparison."""
         # Mock get_sales_summary to return different data for different periods
+        call_count = [0]  # Use list to make it mutable in closure
+        
         def mock_get_sales_summary(start_date=None, end_date=None, **kwargs):
-            # Use different logic to distinguish periods
-            if start_date and start_date >= date(2023, 1, 15):  # Current period (more recent)
+            call_count[0] += 1
+            if call_count[0] == 1:  # First call - current period
                 return {
                     'summary': {'total_units': 100, 'total_revenue': 50.0, 'unique_apps': 2}
                 }
-            else:  # Comparison period (older)
+            else:  # Second call - comparison period
                 return {
                     'summary': {'total_units': 80, 'total_revenue': 40.0, 'unique_apps': 2}
                 }
@@ -163,6 +165,7 @@ class TestReportProcessor:
             result = report_processor.compare_periods(current_days=30, comparison_days=30)
         
         # Check that periods are defined
+        assert 'periods' in result
         assert 'current' in result['periods']
         assert 'comparison' in result['periods']
         

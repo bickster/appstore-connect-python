@@ -31,3 +31,8 @@ class NotFoundError(AppStoreConnectError):
 class PermissionError(AppStoreConnectError):
     """Raised when insufficient permissions for operation."""
     pass
+
+
+class ServerError(AppStoreConnectError):
+    """Raised when server returns 5xx error."""
+    pass

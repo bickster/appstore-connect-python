@@ -132,10 +132,10 @@ def normalize_date(date_input: Union[str, date, datetime]) -> date:
     Raises:
         ValidationError: If the date cannot be parsed
     """
-    if isinstance(date_input, date):
-        return date_input
-    elif isinstance(date_input, datetime):
+    if isinstance(date_input, datetime):
         return date_input.date()
+    elif isinstance(date_input, date):
+        return date_input
     elif isinstance(date_input, str):
         try:
             # Try parsing ISO format: YYYY-MM-DD

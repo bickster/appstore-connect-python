@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(python3 -m pytest tests/test_exceptions.py::TestExceptionHierarchy::test_base_exception -v)"
+    ],
+    "deny": []
+  }
+}

@@ -47,7 +47,7 @@ Before you can use this library, you need:
 
 ```python
 import os
-from appstore_connect import AppStoreConnectAPI
+from appstore_connect.client import AppStoreConnectAPI
 
 # Initialize the API client
 api = AppStoreConnectAPI(
@@ -80,7 +80,7 @@ Then in your code:
 
 ```python
 import os
-from appstore_connect import AppStoreConnectAPI
+from appstore_connect.client import AppStoreConnectAPI
 
 api = AppStoreConnectAPI(
     key_id=os.getenv('APP_STORE_KEY_ID'),
@@ -140,7 +140,7 @@ events_df = api.get_subscription_event_report(yesterday)
 Use the `ReportProcessor` for advanced analytics:
 
 ```python
-from appstore_connect import create_report_processor
+from appstore_connect.reports import create_report_processor
 
 # Create processor
 processor = create_report_processor(
@@ -185,7 +185,7 @@ for metric, data in comparison['changes'].items():
 Use the `MetadataManager` for app store listing management:
 
 ```python
-from appstore_connect import create_metadata_manager
+from appstore_connect.metadata import create_metadata_manager
 
 # Create metadata manager
 manager = create_metadata_manager(

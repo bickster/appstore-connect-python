@@ -11,7 +11,7 @@ This example demonstrates how to:
 """
 
 import os
-from appstore_connect import create_metadata_manager
+from appstore_connect.metadata import create_metadata_manager
 from appstore_connect.exceptions import AppStoreConnectError, PermissionError
 
 def main():

@@ -1,0 +1,44 @@
+# PyPI Configuration Template
+# 
+# To use this template:
+# 1. Copy this file to ~/.pypirc
+# 2. Replace the placeholder values with your actual credentials
+# 3. Set appropriate file permissions: chmod 600 ~/.pypirc
+#
+# For more information: https://packaging.python.org/en/latest/specifications/pypirc/
+
+[distutils]
+index-servers =
+    pypi
+    testpypi
+
+[pypi]
+# For token authentication (recommended):
+username = __token__
+password = pypi-YOUR-API-TOKEN-HERE
+
+# For username/password authentication (legacy):
+# username = your-pypi-username
+# password = your-pypi-password
+
+[testpypi]
+# Test PyPI for testing package uploads
+repository = https://test.pypi.org/legacy/
+username = __token__
+password = pypi-YOUR-TEST-API-TOKEN-HERE
+
+# For username/password authentication (legacy):
+# username = your-testpypi-username
+# password = your-testpypi-password
+
+# Security Notes:
+# 1. NEVER commit .pypirc to version control
+# 2. Use API tokens instead of passwords when possible
+# 3. Create project-scoped tokens for better security
+# 4. Set file permissions to 600 (read/write for owner only)
+#
+# To generate API tokens:
+# 1. Log in to PyPI.org
+# 2. Go to Account Settings
+# 3. Select "API tokens"
+# 4. Create a new token with appropriate scope

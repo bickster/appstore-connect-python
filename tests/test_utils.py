@@ -150,7 +150,8 @@ class TestDateHandling:
         expected_date = date(2023, 1, 15)
         result = normalize_date(test_datetime)
         assert result == expected_date
-        assert isinstance(result, date)
+        # Check that it's a date object, not datetime
+        assert isinstance(result, date) and not isinstance(result, datetime)
     
     def test_normalize_date_from_string_iso(self):
         """Test normalizing from ISO string."""
