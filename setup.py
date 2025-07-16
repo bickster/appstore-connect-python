@@ -10,7 +10,7 @@ with open("requirements.txt", "r", encoding="utf-8") as fh:
 
 setup(
     name="apple-appstore-connect-client",
-    version="1.0.2",
+    version="1.0.3",
     author="Chris Bick",
     author_email="chris@bickster.com",
     description="A comprehensive Python client for the Apple App Store Connect API",
