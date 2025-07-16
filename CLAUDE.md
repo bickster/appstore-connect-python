@@ -54,11 +54,36 @@ This file provides guidance to Claude AI when working with code in this reposito
 
 ## Release Process
 
+### Automated Release (Recommended)
+
+Use the automated release script:
+```bash
+./release.sh <version>
+```
+
+For example:
+```bash
+./release.sh 1.0.0
+```
+
+This script will automatically:
+1. Verify you're on the main branch with no uncommitted changes
+2. Update version in `setup.py` and `__init__.py`
+3. Run all tests and quality checks
+4. Commit version changes
+5. Create and push git tag
+6. Trigger GitHub Actions to publish to PyPI
+
+### Manual Release
+
+If you need to release manually:
 1. Update version in `setup.py` and `__init__.py`
 2. Update `CHANGELOG.md` with release notes
-3. Create git tag: `git tag v0.1.0`
-4. Push tag: `git push origin v0.1.0`
+3. Create git tag: `git tag v<version>`
+4. Push tag: `git push origin v<version>`
 5. GitHub Actions will automatically publish to PyPI
+
+For detailed release instructions, see `RELEASE_GUIDE.md`
 
 ## Helpful Commands
 
