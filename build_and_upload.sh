@@ -35,25 +35,25 @@ fi
 
 # Run tests
 echo -e "${YELLOW}Running tests...${NC}"
-python -m pytest || {
+python3 -m pytest || {
     echo -e "${RED}Tests failed! Fix the tests before uploading.${NC}"
     exit 1
 }
 
 # Run linting
 echo -e "${YELLOW}Running code quality checks...${NC}"
-python -m black --check src/appstore_connect tests || {
+python3 -m black --check src/appstore_connect tests || {
     echo -e "${RED}Black formatting check failed!${NC}"
-    echo "Run 'python -m black src/appstore_connect tests' to fix formatting"
+    echo "Run 'python3 -m black src/appstore_connect tests' to fix formatting"
     exit 1
 }
 
-python -m flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503 || {
+python3 -m flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503 || {
     echo -e "${RED}Flake8 linting failed!${NC}"
     exit 1
 }
 
-python -m mypy src/appstore_connect || {
+python3 -m mypy src/appstore_connect || {
     echo -e "${RED}Mypy type checking failed!${NC}"
     exit 1
 }
@@ -64,7 +64,7 @@ rm -rf dist/ build/ *.egg-info
 
 # Build the package
 echo -e "${YELLOW}Building package...${NC}"
-python -m build
+python3 -m build
 
 # Display what will be uploaded
 echo -e "${YELLOW}The following files will be uploaded:${NC}"
@@ -81,7 +81,7 @@ fi
 
 # Upload to PyPI
 echo -e "${YELLOW}Uploading to PyPI...${NC}"
-python -m twine upload dist/*
+python3 -m twine upload dist/*
 
 echo -e "${GREEN}✅ Successfully uploaded to PyPI!${NC}"
 echo ""
