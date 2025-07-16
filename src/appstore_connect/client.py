@@ -195,7 +195,7 @@ class AppStoreConnectAPI:
 
     @sleep_and_retry
     @limits(calls=3500, period=3600)  # Apple's rate limit
-    def _make_request(self, *args, **kwargs) -> requests.Response:
+    def _make_request(self, *args: Any, **kwargs: Any) -> requests.Response:
         """Rate-limited wrapper for _make_request_raw."""
         return self._make_request_raw(*args, **kwargs)
 

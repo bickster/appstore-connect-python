@@ -354,7 +354,7 @@ def calculate_summary_metrics(df: pd.DataFrame) -> Dict[str, Any]:
             "countries": 0,
         }
 
-    metrics = {}
+    metrics: Dict[str, Any] = {}
 
     # Basic counts
     if "Units" in df.columns:

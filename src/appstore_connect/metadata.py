@@ -30,7 +30,7 @@ class MetadataManager:
     def __init__(self, api: AppStoreConnectAPI):
         """Initialize with an API client."""
         self.api = api
-        self._temp_cache = None
+        self._temp_cache: Optional[Dict[str, Any]] = None
         self._in_batch_mode = False
 
     @contextmanager
@@ -108,7 +108,7 @@ class MetadataManager:
         updates: Dict[str, Any],
         locale: str = "en-US",
         validate: bool = True,
-    ) -> Dict[str, bool]:
+    ) -> Dict[str, Any]:
         """
         Update app store listing with multiple fields.
 
@@ -219,7 +219,7 @@ class MetadataManager:
         updates: Dict[str, Dict[str, Any]],
         locale: str = "en-US",
         continue_on_error: bool = True,
-    ) -> Dict[str, Dict[str, bool]]:
+    ) -> Dict[str, Any]:
         """
         Update multiple apps with different field updates.
 

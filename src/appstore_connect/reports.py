@@ -235,7 +235,7 @@ class ReportProcessor:
 
     def _analyze_subscription_data(self, df: pd.DataFrame) -> Dict[str, Any]:
         """Analyze subscription DataFrame and return metrics."""
-        metrics = {}
+        metrics: Dict[str, Any] = {}
 
         if "Active Subscriptions" in df.columns:
             metrics["total_active"] = int(df["Active Subscriptions"].sum())
