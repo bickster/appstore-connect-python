@@ -60,8 +60,8 @@ class AppStoreConnectAPI:
         self.private_key_path = Path(private_key_path)
         self.vendor_number = vendor_number
         self.app_ids = app_ids or []
-        self._token = None
-        self._token_expiry = None
+        self._token: Optional[str] = None
+        self._token_expiry: Optional[int] = None
 
         # Validate required parameters
         if not all([key_id, issuer_id, private_key_path, vendor_number]):
@@ -129,8 +129,8 @@ class AppStoreConnectAPI:
     def _make_request_raw(
         self,
         method: str = "GET",
-        url: str = None,
-        endpoint: str = None,
+        url: Optional[str] = None,
+        endpoint: Optional[str] = None,
         params: Optional[Dict] = None,
         data: Optional[Dict] = None,
     ) -> requests.Response:
@@ -195,7 +195,7 @@ class AppStoreConnectAPI:
 
     @sleep_and_retry
     @limits(calls=3500, period=3600)  # Apple's rate limit
-    def _make_request(self, *args, **kwargs):
+    def _make_request(self, *args, **kwargs) -> requests.Response:
         """Rate-limited wrapper for _make_request_raw."""
         return self._make_request_raw(*args, **kwargs)
 
@@ -368,7 +368,11 @@ class AppStoreConnectAPI:
         self, start_date: date, end_date: date
     ) -> Dict[str, List[pd.DataFrame]]:
         """Fetch reports for a specific date range."""
-        results = {"sales": [], "subscriptions": [], "subscription_events": []}
+        results: Dict[str, List[pd.DataFrame]] = {
+            "sales": [],
+            "subscriptions": [],
+            "subscription_events": [],
+        }
 
         current_date = start_date
         while current_date <= end_date:
@@ -398,7 +402,11 @@ class AppStoreConnectAPI:
         self, days: int = 30
     ) -> Dict[str, List[pd.DataFrame]]:
         """Fetch reports using smart frequency selection to minimize API calls."""
-        results = {"sales": [], "subscriptions": [], "subscription_events": []}
+        results: Dict[str, List[pd.DataFrame]] = {
+            "sales": [],
+            "subscriptions": [],
+            "subscription_events": [],
+        }
 
         # Apple reports are available the next day at 5 AM Pacific Time
         utc_now = datetime.now(timezone.utc)
@@ -825,7 +833,7 @@ class AppStoreConnectAPI:
         logger = logging.getLogger(__name__)
         logger.info(f"get_current_metadata: Starting for app_id={app_id}")
 
-        metadata = {
+        metadata: Dict[str, Any] = {
             "app_info": {},
             "app_localizations": {},
             "version_info": {},

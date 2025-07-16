@@ -34,7 +34,7 @@ class MetadataManager:
         self._in_batch_mode = False
 
     @contextmanager
-    def batch_operation(self):
+    def batch_operation(self) -> Any:
         """
         Context manager for batch operations that enables temporary caching.
 
@@ -328,7 +328,7 @@ class MetadataManager:
         """
         # Use batch operation context for caching
         with self.batch_operation():
-            results = {"updated": [], "skipped": [], "errors": {}}
+            results: Dict[str, Any] = {"updated": [], "skipped": [], "errors": {}}
 
             # If no app_versions provided, get all apps from portfolio
             if app_versions is None:

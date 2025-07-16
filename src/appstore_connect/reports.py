@@ -193,7 +193,7 @@ class ReportProcessor:
             reports.get("subscription_events", []), sort_by="report_date"
         )
 
-        analysis = {
+        analysis: Dict[str, Any] = {
             "subscription_summary": {},
             "event_summary": {},
             "by_app": {},
