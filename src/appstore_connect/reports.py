@@ -252,7 +252,7 @@ class ReportProcessor:
 
     def _analyze_subscription_events(self, df: pd.DataFrame) -> Dict[str, Any]:
         """Analyze subscription events DataFrame and return metrics."""
-        metrics = {}
+        metrics: Dict[str, Any] = {}
 
         if "Event" in df.columns:
             event_counts = df["Event"].value_counts()
@@ -262,10 +262,10 @@ class ReportProcessor:
             if "Subscribe" in event_counts and "Cancel" in event_counts:
                 metrics["cancellation_rate"] = float(
                     event_counts["Cancel"] / event_counts["Subscribe"]
-                )
+                )  # type: ignore[assignment]
 
         if "Quantity" in df.columns:
-            metrics["total_events"] = int(df["Quantity"].sum())
+            metrics["total_events"] = int(df["Quantity"].sum())  # type: ignore[assignment]
 
         return metrics
 

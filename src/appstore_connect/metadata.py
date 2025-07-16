@@ -304,7 +304,7 @@ class MetadataManager:
                 if not dry_run and original_name != new_name:
                     try:
                         success = self.api.update_app_name(app_id, new_name, locale)
-                        results[app_id]["updated"] = success
+                        results[app_id]["updated"] = success  # type: ignore[assignment]
                     except Exception as e:
                         results[app_id]["error"] = str(e)
 
@@ -416,7 +416,7 @@ class MetadataManager:
                 else:
                     app_ids = [validate_app_id(app_id) for app_id in app_ids]
 
-                results = {}
+                results: Dict[str, Dict[str, Any]] = {}
 
                 for app_id in app_ids:
                     if app_id not in portfolio_dict:
@@ -438,8 +438,8 @@ class MetadataManager:
                             set(app_localizations.keys())
                             | set(version_localizations.keys())
                         ),
-                        "missing_app_level": [],
-                        "missing_version_level": [],
+                        "missing_app_level": [],  # type: ignore[dict-item]
+                        "missing_version_level": [],  # type: ignore[dict-item]
                     }
 
                     # Check for missing localizations
@@ -448,9 +448,9 @@ class MetadataManager:
                     )
                     for locale in all_locales:
                         if locale not in app_localizations:
-                            results[app_id]["missing_app_level"].append(locale)
+                            results[app_id]["missing_app_level"].append(locale)  # type: ignore[attr-defined]
                         if locale not in version_localizations:
-                            results[app_id]["missing_version_level"].append(locale)
+                            results[app_id]["missing_version_level"].append(locale)  # type: ignore[attr-defined]
 
                 return results
         except Exception as e:

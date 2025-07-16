@@ -269,7 +269,7 @@ class AppStoreConnectAPI:
         # Apple returns gzipped TSV data
         try:
             with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as gz:
-                df = pd.read_csv(gz, sep="\t", engine="python")
+                df = pd.read_csv(gz, sep="\t", engine="python")  # type: ignore[call-overload]
         except Exception as e:
             raise AppStoreConnectError(f"Failed to parse report data: {e}")
 
@@ -286,7 +286,7 @@ class AppStoreConnectAPI:
                 if "App Apple ID" in df.columns:
                     df = df[df["App Apple ID"].astype(str).isin(self.app_ids)]
 
-        return df
+        return df  # type: ignore[no-any-return]
 
     def get_financial_report(
         self, year: int, month: int, region: str = "ZZ"
@@ -316,8 +316,8 @@ class AppStoreConnectAPI:
 
         try:
             with gzip.GzipFile(fileobj=io.BytesIO(response.content)) as gz:
-                df = pd.read_csv(gz, sep="\t", engine="python")
-            return df
+                df = pd.read_csv(gz, sep="\t", engine="python")  # type: ignore[call-overload]
+            return df  # type: ignore[no-any-return]
         except Exception as e:
             raise AppStoreConnectError(f"Failed to parse financial report: {e}")
 
@@ -485,7 +485,7 @@ class AppStoreConnectAPI:
         try:
             response = self._make_request(method="GET", endpoint="/apps")
             if response.status_code == 200:
-                return response.json()
+                return response.json()  # type: ignore[no-any-return]
         except PermissionError:
             # API key doesn't have metadata permissions
             return None
@@ -500,14 +500,14 @@ class AppStoreConnectAPI:
         response = self._make_request(method="GET", endpoint=f"/apps/{app_id}")
         logger.info(f"get_app_info: Response status={response.status_code}")
         if response.status_code == 200:
-            return response.json()
+            return response.json()  # type: ignore[no-any-return]
         return None
 
     def get_app_infos(self, app_id: str) -> Optional[Dict]:
         """Get app info objects for an app (contains localization references)."""
         response = self._make_request(method="GET", endpoint=f"/apps/{app_id}/appInfos")
         if response.status_code == 200:
-            return response.json()
+            return response.json()  # type: ignore[no-any-return]
         return None
 
     def get_app_info_localizations(self, app_info_id: str) -> Optional[Dict]:
@@ -516,7 +516,7 @@ class AppStoreConnectAPI:
             method="GET", endpoint=f"/appInfos/{app_info_id}/appInfoLocalizations"
         )
         if response.status_code == 200:
-            return response.json()
+            return response.json()  # type: ignore[no-any-return]
         return None
 
     def update_app_info_localization(self, localization_id: str, data: Dict) -> bool:
@@ -533,7 +533,7 @@ class AppStoreConnectAPI:
             endpoint=f"/appInfoLocalizations/{localization_id}",
             data=update_data,
         )
-        return response.status_code == 200
+        return response.status_code == 200  # type: ignore[no-any-return]
 
     # App Store Version Methods
 
@@ -555,7 +555,7 @@ class AppStoreConnectAPI:
             method="POST", endpoint="/appStoreVersions", data=data
         )
         if response.status_code == 201:
-            return response.json()
+            return response.json()  # type: ignore[no-any-return]
         return None
 
     def get_app_store_versions(self, app_id: str) -> Optional[Dict]:
@@ -588,7 +588,7 @@ class AppStoreConnectAPI:
             raise
 
         if response.status_code == 200:
-            return response.json()
+            return response.json()  # type: ignore[no-any-return]
         return None
 
     def get_app_store_version_localizations(self, version_id: str) -> Optional[Dict]:
@@ -598,7 +598,7 @@ class AppStoreConnectAPI:
             endpoint=f"/appStoreVersions/{version_id}/appStoreVersionLocalizations",
         )
         if response.status_code == 200:
-            return response.json()
+            return response.json()  # type: ignore[no-any-return]
         return None
 
     def update_app_store_version_localization(
@@ -617,7 +617,7 @@ class AppStoreConnectAPI:
             endpoint=f"/appStoreVersionLocalizations/{localization_id}",
             data=update_data,
         )
-        return response.status_code == 200
+        return response.status_code == 200  # type: ignore[no-any-return]
 
     # High-level helper methods
 
@@ -718,7 +718,7 @@ class AppStoreConnectAPI:
                 "DEVELOPER_REJECTED",
                 "REJECTED",
             ]:
-                return version
+                return version  # type: ignore[no-any-return]
 
         return None
 
