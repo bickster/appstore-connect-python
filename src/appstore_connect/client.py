@@ -11,7 +11,7 @@ import time
 import requests
 from datetime import datetime, timedelta, timezone, date
 from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Optional, Union, Any
 import gzip
 import io
 import pandas as pd
