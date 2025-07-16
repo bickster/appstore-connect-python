@@ -11,6 +11,7 @@ Before creating a release, ensure you have:
 3. **GitHub Repository Access**: Push access to the main branch and ability to create tags
 4. **Development Environment**: All development dependencies installed (`pip install -e .[dev]`)
 5. **Clean Working Directory**: No uncommitted changes in your local repository
+6. **Updated CHANGELOG.md**: Document all changes for the new version before releasing
 
 ## Automated Release Process
 
@@ -27,13 +28,17 @@ For example:
 
 This script will:
 1. Verify you're on the main branch with no uncommitted changes
-2. Pull the latest changes from origin/main
-3. Update version numbers in `setup.py` and `__init__.py`
-4. Run all tests and linting checks
-5. Build the package
-6. Commit the version changes
-7. Create and push a git tag
-8. Trigger the GitHub Actions workflow for PyPI deployment
+2. Check that CHANGELOG.md contains an entry for the new version
+3. Pull the latest changes from origin/main
+4. Update version numbers in `setup.py`, `pyproject.toml`, and `__init__.py`
+5. Run all tests and linting checks
+6. Build the package
+7. Commit the version changes
+8. Create and push a git tag
+9. Trigger the GitHub Actions workflow which will:
+   - Run tests on multiple Python versions
+   - Build and publish to PyPI
+   - Create a GitHub release with changelog notes
 
 ## Manual Release Process
 
@@ -41,9 +46,10 @@ If you need to create a release manually:
 
 ### 1. Update Version Numbers
 
-Update the version in two files:
+Update the version in three files:
 - `setup.py`: Change the `version` parameter
-- `appstore_connect/__init__.py`: Update `__version__`
+- `pyproject.toml`: Update the `version` field
+- `src/appstore_connect/__init__.py`: Update `__version__`
 
 ### 2. Run Quality Checks
 
@@ -75,7 +81,7 @@ python -m build
 
 ```bash
 # Commit version changes
-git add setup.py appstore_connect/__init__.py
+git add setup.py pyproject.toml src/appstore_connect/__init__.py
 git commit -m "Bump version to X.Y.Z"
 
 # Create annotated tag
@@ -105,10 +111,12 @@ python -m twine upload dist/*
 
 After creating a release:
 
-1. **Update CHANGELOG.md**: Document the changes in this release
-2. **Create GitHub Release**: Go to the releases page and create a new release from the tag
-3. **Verify PyPI Upload**: Check that the new version appears on [PyPI](https://pypi.org/project/appstore-connect-client/)
-4. **Test Installation**: In a clean environment, test `pip install appstore-connect-client==X.Y.Z`
+1. **Verify PyPI Upload**: Check that the new version appears on [PyPI](https://pypi.org/project/apple-appstore-connect-client/)
+2. **Verify GitHub Release**: Check that the release was automatically created with changelog notes
+3. **Test Installation**: In a clean environment, test `pip install apple-appstore-connect-client==X.Y.Z`
+4. **Update Documentation**: If there are new features, update the documentation accordingly
+
+Note: CHANGELOG.md should be updated BEFORE running the release script, and GitHub releases are now created automatically.
 
 ## Setting Up GitHub Actions for PyPI
 
@@ -126,9 +134,12 @@ To enable automated PyPI uploads via GitHub Actions:
 
 3. The GitHub Actions workflow will automatically:
    - Run when you push a tag starting with 'v'
-   - Execute all tests
+   - Execute all tests on Python 3.8-3.12
    - Build the package
    - Upload to PyPI using the token
+   - Extract release notes from CHANGELOG.md
+   - Create a GitHub release with the changelog notes
+   - Attach the built wheel and source distribution to the release
 
 ## Troubleshooting
 

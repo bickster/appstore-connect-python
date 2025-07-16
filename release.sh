@@ -38,6 +38,15 @@ if [ -n "$(git status --porcelain)" ]; then
     exit 1
 fi
 
+# Check if CHANGELOG.md contains entry for this version
+echo -e "${YELLOW}Checking CHANGELOG.md for version ${VERSION}...${NC}"
+if ! grep -q "## \[${VERSION}\]" CHANGELOG.md; then
+    echo -e "${RED}Error: CHANGELOG.md does not contain an entry for version ${VERSION}${NC}"
+    echo "Please add a changelog entry for this version before releasing."
+    exit 1
+fi
+echo -e "${GREEN}✓ CHANGELOG.md contains entry for version ${VERSION}${NC}"
+
 # Pull latest changes
 echo -e "${YELLOW}Pulling latest changes from origin/main...${NC}"
 git pull origin main
@@ -51,6 +60,11 @@ rm setup.py.bak
 echo -e "${YELLOW}Updating version in __init__.py...${NC}"
 sed -i.bak "s/__version__ = \".*\"/__version__ = \"${VERSION}\"/" src/appstore_connect/__init__.py
 rm src/appstore_connect/__init__.py.bak
+
+# Update version in pyproject.toml
+echo -e "${YELLOW}Updating version in pyproject.toml...${NC}"
+sed -i.bak "s/version = \".*\"/version = \"${VERSION}\"/" pyproject.toml
+rm pyproject.toml.bak
 
 # Run tests
 echo -e "${YELLOW}Running tests...${NC}"
@@ -73,7 +87,7 @@ python3 -m build
 
 # Commit version changes
 echo -e "${YELLOW}Committing version changes...${NC}"
-git add setup.py src/appstore_connect/__init__.py
+git add setup.py pyproject.toml src/appstore_connect/__init__.py
 git commit -m "Bump version to ${VERSION}"
 
 # Create and push tag
@@ -91,9 +105,8 @@ echo "The GitHub Actions workflow will now:"
 echo "1. Run tests on multiple Python versions"
 echo "2. Build the package"
 echo "3. Publish to PyPI automatically"
+echo "4. Create a GitHub release with changelog notes"
 echo ""
 echo "Monitor the release at: https://github.com/YOUR_USERNAME/appstore-connect-python/actions"
 echo ""
-echo -e "${YELLOW}Don't forget to:${NC}"
-echo "1. Update CHANGELOG.md with release notes"
-echo "2. Create a GitHub release with changelog details"
+echo -e "${YELLOW}Note: Make sure you've updated CHANGELOG.md before running this script${NC}"
