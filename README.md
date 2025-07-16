@@ -224,9 +224,9 @@ pytest tests/test_client.py
 2. Create your feature branch (`git checkout -b feature/amazing-feature`)
 3. Install development dependencies: `pip install -e .[dev]`
 4. Make your changes and add tests
-5. Run tests: `pytest`
-6. Check formatting: `black --check src/appstore_connect tests`
-7. Format code: `black src/appstore_connect tests`
+5. Run tests: `python -m pytest`
+6. Check formatting: `python -m black --check src/appstore_connect tests`
+7. Format code: `python -m black src/appstore_connect tests`
 8. Commit your changes (`git commit -m 'Add amazing feature'`)
 9. Push to the branch (`git push origin feature/amazing-feature`)
 10. Open a Pull Request

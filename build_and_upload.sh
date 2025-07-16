@@ -35,25 +35,25 @@ fi
 
 # Run tests
 echo -e "${YELLOW}Running tests...${NC}"
-pytest || {
+python -m pytest || {
     echo -e "${RED}Tests failed! Fix the tests before uploading.${NC}"
     exit 1
 }
 
 # Run linting
 echo -e "${YELLOW}Running code quality checks...${NC}"
-black --check src/appstore_connect tests || {
+python -m black --check src/appstore_connect tests || {
     echo -e "${RED}Black formatting check failed!${NC}"
-    echo "Run 'black src/appstore_connect tests' to fix formatting"
+    echo "Run 'python -m black src/appstore_connect tests' to fix formatting"
     exit 1
 }
 
-flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503 || {
+python -m flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503 || {
     echo -e "${RED}Flake8 linting failed!${NC}"
     exit 1
 }
 
-mypy src/appstore_connect || {
+python -m mypy src/appstore_connect || {
     echo -e "${RED}Mypy type checking failed!${NC}"
     exit 1
 }

@@ -49,16 +49,16 @@ Update the version in two files:
 
 ```bash
 # Run tests
-pytest
+python -m pytest
 
 # Check code formatting
-black --check appstore_connect tests
+python -m black --check src/appstore_connect tests
 
 # Run linter
-flake8 appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503
+python -m flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503
 
 # Type checking
-mypy appstore_connect
+python -m mypy src/appstore_connect
 ```
 
 ### 3. Build the Package
