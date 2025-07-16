@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2025-01-16
+
+### Fixed
+- Added proper permissions (contents: write) to GitHub Actions workflow for release creation
+- Release script now correctly updates pyproject.toml python_version field
+
+### Changed
+- Test release to verify complete automated release pipeline
+
 ## [1.0.2] - 2025-01-16
 
 ### Added

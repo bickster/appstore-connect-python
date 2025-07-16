@@ -61,10 +61,15 @@ echo -e "${YELLOW}Updating version in __init__.py...${NC}"
 sed -i.bak "s/__version__ = \".*\"/__version__ = \"${VERSION}\"/" src/appstore_connect/__init__.py
 rm src/appstore_connect/__init__.py.bak
 
-# Update version in pyproject.toml
+# Update version in pyproject.toml (only in [project] section)
 echo -e "${YELLOW}Updating version in pyproject.toml...${NC}"
-sed -i.bak "s/version = \".*\"/version = \"${VERSION}\"/" pyproject.toml
-rm pyproject.toml.bak
+# Use awk to update only the version line in the [project] section
+awk -v ver="${VERSION}" '
+    /^\[project\]/ { in_project = 1 }
+    /^\[/ && !/^\[project\]/ { in_project = 0 }
+    in_project && /^version = / { print "version = \"" ver "\""; next }
+    { print }
+' pyproject.toml > pyproject.toml.tmp && mv pyproject.toml.tmp pyproject.toml
 
 # Run tests
 echo -e "${YELLOW}Running tests...${NC}"
