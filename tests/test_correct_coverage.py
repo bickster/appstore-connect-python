@@ -114,7 +114,8 @@ class TestActualMetadataCoverage:
         app_versions = {"123456789": "2.0.0", "987654321": "1.5.0"}
         results = manager.prepare_version_releases(app_versions, dry_run=False)
 
-        # Check results structure - prepare_version_releases returns {'updated': [], 'skipped': [], 'errors': {}}
+        # Check results structure - prepare_version_releases returns
+        # {'updated': [], 'skipped': [], 'errors': {}}
         assert "updated" in results
         assert "skipped" in results
         assert "errors" in results

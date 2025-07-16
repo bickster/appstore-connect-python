@@ -315,7 +315,8 @@ class TestEditableVersionHandling:
 
 
 class TestVersionLocalizationNotFound:
-    """Test version localization not found scenarios (lines 654, 661, 671, 679, 686, 696, 704, 711)."""
+    """Test version localization not found scenarios
+    (lines 654, 661, 671, 679, 686, 696, 704, 711)."""
 
     def test_update_app_description_missing_version_localizations(self, api_client):
         """Test update_app_description when version localizations are missing."""

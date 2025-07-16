@@ -237,7 +237,8 @@ class TestMetadataManagement:
                         apps_result["data"][:3]
                     ):  # Show first 3 apps
                         logger.info(
-                            f"App {i}: ID={app.get('id')}, Name={app.get('attributes', {}).get('name')}"
+                            f"App {i}: ID={app.get('id')}, "
+                            f"Name={app.get('attributes', {}).get('name')}"
                         )
                         logger.info(
                             f"  Bundle ID: {app.get('attributes', {}).get('bundleId')}"
@@ -268,7 +269,8 @@ class TestMetadataManagement:
             except PermissionError as e:
                 logger.info(f"Skipping test due to insufficient permissions: {e}")
                 pytest.skip(
-                    f"API key does not have sufficient permissions to access app store versions: {e}"
+                    f"API key does not have sufficient permissions to access "
+                    f"app store versions: {e}"
                 )
 
             logger.info(
@@ -318,7 +320,8 @@ class TestMetadataManagement:
             # Log version_localizations
             if metadata.get("version_localizations"):
                 logger.info(
-                    f"version_localizations locales: {list(metadata['version_localizations'].keys())}"
+                    f"version_localizations locales: "
+                    f"{list(metadata['version_localizations'].keys())}"
                 )
                 for locale, data in list(metadata["version_localizations"].items())[
                     :1

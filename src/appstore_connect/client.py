@@ -868,7 +868,8 @@ class AppStoreConnectAPI:
             if app_infos and "data" in app_infos and app_infos["data"]:
                 app_info_id = app_infos["data"][0]["id"]
                 logger.info(
-                    f"get_current_metadata: Step 3 - Getting localizations for app_info_id {app_info_id}"
+                    f"get_current_metadata: Step 3 - Getting localizations for "
+                    f"app_info_id {app_info_id}"
                 )
                 start = time.time()
                 localizations = self.get_app_info_localizations(app_info_id)
@@ -911,12 +912,14 @@ class AppStoreConnectAPI:
                     latest_version = versions["data"][0]
                     metadata["version_info"] = latest_version["attributes"]
                     logger.info(
-                        f"get_current_metadata: Found version {latest_version['attributes'].get('versionString', 'unknown')}"
+                        f"get_current_metadata: Found version "
+                        f"{latest_version['attributes'].get('versionString', 'unknown')}"
                     )
 
                     # Get version localizations
                     logger.info(
-                        f"get_current_metadata: Step 5 - Getting version localizations for {latest_version['id']}"
+                        f"get_current_metadata: Step 5 - Getting version localizations "
+                        f"for {latest_version['id']}"
                     )
                     start = time.time()
                     version_localizations = self.get_app_store_version_localizations(
@@ -932,7 +935,8 @@ class AppStoreConnectAPI:
                                 "attributes"
                             ]
                         logger.info(
-                            f"get_current_metadata: Found {len(version_localizations['data'])} version localizations"
+                            f"get_current_metadata: Found "
+                            f"{len(version_localizations['data'])} version localizations"
                         )
                     else:
                         logger.info(

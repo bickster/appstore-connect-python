@@ -168,7 +168,8 @@ class MetadataManager:
                 for field in version_updates:
                     results[field] = False
                 print(
-                    f"No editable version found for app {app_id}. Cannot update version-level fields."
+                    f"No editable version found for app {app_id}. "
+                    f"Cannot update version-level fields."
                 )
             else:
                 for field, value in version_updates.items():
