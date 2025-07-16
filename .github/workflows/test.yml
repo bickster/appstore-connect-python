@@ -79,3 +79,37 @@ jobs:
         TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
       run: |
         twine upload dist/*
+    
+    - name: Extract version from tag
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+    
+    - name: Extract release notes
+      id: release_notes
+      run: |
+        VERSION="${{ steps.get_version.outputs.VERSION }}"
+        # Extract the section for this version from CHANGELOG.md
+        awk -v ver="## [$VERSION]" '
+          $0 ~ ver {p=1; next}
+          /^## \[/ && p {exit}
+          p {print}
+        ' CHANGELOG.md > release_notes.txt
+        
+        # Read the content into a GitHub output
+        {
+          echo 'NOTES<<EOF'
+          cat release_notes.txt
+          echo 'EOF'
+        } >> $GITHUB_OUTPUT
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ steps.get_version.outputs.VERSION }}
+        name: Release ${{ steps.get_version.outputs.VERSION }}
+        body: ${{ steps.release_notes.outputs.NOTES }}
+        files: |
+          dist/*.whl
+          dist/*.tar.gz
+        draft: false
+        prerelease: false
