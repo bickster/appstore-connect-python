@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "apple-appstore-connect-client"
-version = "1.0.1"
+version = "1.0.2"
 description = "A comprehensive Python client for the Apple App Store Connect API"
 readme = "README.md"
 license = {text = "MIT"}
@@ -63,7 +63,7 @@ line-length = 100
 target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
 
 [tool.mypy]
-python_version = "3.9"
+python_version = "1.0.2"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = true
