@@ -448,9 +448,13 @@ class MetadataManager:
                     )
                     for locale in all_locales:
                         if locale not in app_localizations:
-                            results[app_id]["missing_app_level"].append(locale)  # type: ignore[attr-defined]
+                            results[app_id]["missing_app_level"].append(
+                                locale
+                            )  # type: ignore[attr-defined]
                         if locale not in version_localizations:
-                            results[app_id]["missing_version_level"].append(locale)  # type: ignore[attr-defined]
+                            results[app_id]["missing_version_level"].append(
+                                locale
+                            )  # type: ignore[attr-defined]
 
                 return results
         except Exception as e:

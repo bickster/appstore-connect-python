@@ -14,7 +14,7 @@ This file provides guidance to Claude AI when working with code in this reposito
 
 1. **Backward Compatibility**: The library maintains compatibility with existing implementations while adding new features
 2. **Clear Error Handling**: All API errors are mapped to specific exception types
-3. **Rate Limiting**: Built-in rate limiting (50 requests/hour) with exponential backoff
+3. **Rate Limiting**: Built-in rate limiting (3500 requests/hour) with exponential backoff
 4. **Type Safety**: Comprehensive type hints throughout the codebase
 
 ## Code Style Guidelines
@@ -79,14 +79,13 @@ pytest tests/test_client.py
 pytest --cov=appstore_connect --cov-report=html --cov-report=term
 
 # Format code
-black src/appstore_connect tests examples
+black src/appstore_connect tests
 
 # Check formatting without making changes
-black --check src/appstore_connect tests examples
+black --check src/appstore_connect tests
 
-# Run linting checks
-flake8 src/appstore_connect tests examples
-black --check src/appstore_connect tests examples
+# Run linting checks (matching GitHub Actions)
+flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503
 
 # Type checking
 mypy src/appstore_connect
@@ -99,11 +98,14 @@ rm -rf build/ dist/ *.egg-info/ .coverage htmlcov/ .pytest_cache/ .mypy_cache/
 find . -type d -name __pycache__ -exec rm -rf {} +
 find . -type f -name "*.pyc" -delete
 
-# Run all checks (lint + type-check + tests)
-flake8 src/appstore_connect tests examples && \
-black --check src/appstore_connect tests examples && \
+# Run all checks (lint + type-check + tests) - matching GitHub Actions
+black --check src/appstore_connect tests && \
+flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503 && \
 mypy src/appstore_connect && \
 pytest
+
+# Or use the build script which runs all checks
+./build_and_upload.sh
 
 # Publish to PyPI (requires API token)
 python -m build

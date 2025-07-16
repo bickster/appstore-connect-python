@@ -55,8 +55,8 @@ dev = [
 include = ["appstore_connect*"]
 
 [tool.black]
-line-length = 88
-target-version = ['py37']
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
 
 [tool.mypy]
 python_version = "3.9"
