@@ -91,11 +91,14 @@ git push origin vX.Y.Z
 If the automated upload fails, you can manually upload:
 
 ```bash
-# Using the build_and_upload.sh script
+# Using the build_and_upload.sh script (builds and uploads)
 ./build_and_upload.sh
 
-# Or manually with twine
-twine upload dist/*
+# Or build without uploading
+./build_and_upload.sh --no-upload
+
+# Then manually upload with twine
+python -m twine upload dist/*
 ```
 
 ## Post-Release Tasks

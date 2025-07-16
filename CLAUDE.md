@@ -107,6 +107,9 @@ python -m pytest
 # Or use the build script which runs all checks
 ./build_and_upload.sh
 
+# To build without uploading to PyPI
+./build_and_upload.sh --no-upload
+
 # Publish to PyPI (requires API token)
 python -m build
 python -m twine upload dist/*
