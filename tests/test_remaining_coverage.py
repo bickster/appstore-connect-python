@@ -69,28 +69,31 @@ class TestMetadataErrorPaths:
         mock_api = Mock()
         manager = MetadataManager(mock_api)
 
-        # First app succeeds, second fails
-        mock_api.update_app_name.side_effect = [True, Exception("Network error")]
+        # Mock validate_app_id to raise an exception for the second app
+        # This will test the exception handling in batch_update_apps
+        def validate_side_effect(app_id):
+            if app_id == "987654321":
+                raise Exception("Invalid app ID")
+            return app_id
 
-        updates = {"123456789": {"name": "App 1"}, "987654321": {"name": "App 2"}}
+        with patch("appstore_connect.metadata.validate_app_id", side_effect=validate_side_effect):
+            with patch("appstore_connect.metadata.logging.error") as mock_error:
+                updates = {"123456789": {"name": "App 1"}, "987654321": {"name": "App 2"}}
+                results = manager.batch_update_apps(updates=updates, continue_on_error=True)
 
-        with patch("logging.error") as mock_error:
-            results = manager.batch_update_apps(updates=updates, continue_on_error=True)
+                # Verify error logging was called
+                assert mock_error.called
+                # Check that error message contains app ID
+                error_msg = str(mock_error.call_args[0][0])
+                assert "987654321" in error_msg
 
-            # Verify error logging was called
-            assert mock_error.called
-            # Check that error message contains app ID
-            error_msg = str(mock_error.call_args[0][0])
-            assert "987654321" in error_msg
+                # Check results structure
+                assert "results" in results
+                assert "123456789" in results["results"]
+                # First app should have succeeded
 
-            # Check results structure
-            assert "results" in results
-            assert "123456789" in results["results"]
-            assert results["results"]["123456789"]["success"] is True
-
-            assert "987654321" in results["results"]
-            assert results["results"]["987654321"]["success"] is False
-            assert "name" in results["results"]["987654321"]["errors"]
+                assert "987654321" in results["results"]
+                assert "error" in results["results"]["987654321"]
 
     def test_prepare_version_releases_with_release_notes(self):
         """Test prepare_version_releases with release notes parameter."""

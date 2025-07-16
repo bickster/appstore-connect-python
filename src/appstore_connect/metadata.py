@@ -8,6 +8,7 @@ including batch operations, validation, and convenient wrapper methods.
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 from contextlib import contextmanager
+import logging
 from .client import AppStoreConnectAPI
 from .utils import (
     validate_app_id,
@@ -242,7 +243,7 @@ class MetadataManager:
                 results[app_id] = {"error": str(e)}
                 if not continue_on_error:
                     break
-                print(f"Error updating app {app_id}: {e}")
+                logging.error(f"Error updating app {app_id}: {e}")
 
         return {"results": results}
 
@@ -459,8 +460,6 @@ class MetadataManager:
                 return results
         except Exception as e:
             # Log error and re-raise
-            import logging
-
             logging.error(f"Error in get_localization_status: {e}")
             raise
 
@@ -557,8 +556,6 @@ class MetadataManager:
             # Re-raise permission errors as-is
             raise
         except Exception as e:
-            import logging
-
             logging.error(f"Error exporting metadata: {e}")
             return False
 
