@@ -5,6 +5,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2025-01-15
+
+### Changed
+- **BREAKING**: Fixed Apple API rate limit from 50/hour to actual 3500/hour
+- Optimized batch operations with new context manager for temporary caching
+- Improved integration test handling with proper timeout management
+- Enhanced error handling for permission errors (403) in tests
+
+### Fixed
+- Fixed integration test timeouts by correcting rate limiter configuration
+- Fixed all flake8 linting issues across the codebase
+- Fixed unused imports and variables
+- Fixed f-strings without placeholders
+- Fixed bare except statements
+- Fixed None comparison issues
+- Removed backward compatibility code from tests
+- Updated test assertions to match actual implementation behavior
+
+### Added
+- Batch operation context manager for MetadataManager to optimize API calls
+- Automatic cache invalidation after batch operations
+- pytest-timeout for better test timeout management
+- Comprehensive test coverage improvements
+
+### Improved
+- Code quality with complete flake8 compliance
+- Test reliability with proper error handling
+- Performance for batch metadata operations
+- Documentation in CLAUDE.md with helpful commands
+
+## [0.2.0] - 2025-01-15
+
+### Changed
+- **BREAKING**: Renamed package from `appstore-connect-client` to `apple-appstore-connect-client` for PyPI uniqueness
+- Major project restructuring to use src/ directory layout
+- Modernized project structure following Python best practices
+
+### Added
+- Comprehensive integration tests
+- Test fixtures and conftest.py for better test organization
+- Additional test coverage for edge cases
+
+### Fixed
+- StopIteration error in metadata permission tests
+- Various test assertion failures
+- Release script to use python3 -m for all commands
+
 ## [0.1.0] - 2025-01-15
 
 ### Added

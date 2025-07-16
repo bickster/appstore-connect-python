@@ -18,18 +18,18 @@ from .exceptions import (
 )
 from . import utils
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __author__ = "Chris Bick"
 __email__ = "chris@bickster.com"
 
 __all__ = [
     "AppStoreConnectAPI",
-    "ReportProcessor", 
+    "ReportProcessor",
     "MetadataManager",
     "create_report_processor",
     "create_metadata_manager",
     "AppStoreConnectError",
-    "AuthenticationError", 
+    "AuthenticationError",
     "RateLimitError",
     "ValidationError",
     "NotFoundError",
