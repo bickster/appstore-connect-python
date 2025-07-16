@@ -128,7 +128,11 @@ class TestOptimizedFetchingLogs:
                     results = api_client._fetch_multiple_days_optimized(days=1)
 
                     # Verify results is empty due to error
-                    assert results == {"sales": [], "subscriptions": [], "subscription_events": []}
+                    assert results == {
+                        "sales": [],
+                        "subscriptions": [],
+                        "subscription_events": [],
+                    }
 
                     # Should log the error
                     assert mock_warning.called

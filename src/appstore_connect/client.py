@@ -68,9 +68,7 @@ class AppStoreConnectAPI:
             raise ValidationError("Missing required authentication parameters")
 
         if not self.private_key_path.exists():
-            raise ValidationError(
-                f"Private key file not found: {private_key_path}"
-            )
+            raise ValidationError(f"Private key file not found: {private_key_path}")
 
     def _load_private_key(self) -> str:
         """Load the private key from file."""
@@ -84,11 +82,7 @@ class AppStoreConnectAPI:
         """Generate a JWT token for App Store Connect API."""
         current_time = int(datetime.now(timezone.utc).timestamp())
 
-        if (
-            self._token
-            and self._token_expiry
-            and current_time < self._token_expiry
-        ):
+        if self._token and self._token_expiry and current_time < self._token_expiry:
             return self._token
 
         try:
@@ -125,8 +119,7 @@ class AppStoreConnectAPI:
         logger.info("_get_headers: Generating token...")
         token = self._generate_token()
         logger.info(
-            f"_get_headers: Token generated, "
-            f"length={len(token) if token else 0}"
+            f"_get_headers: Token generated, " f"length={len(token) if token else 0}"
         )
         return {
             "Authorization": f"Bearer {token}",
@@ -169,13 +162,10 @@ class AppStoreConnectAPI:
                 timeout=30,
             )
             logger.info(
-                f"_make_request: Response received - "
-                f"status={response.status_code}"
+                f"_make_request: Response received - " f"status={response.status_code}"
             )
         except requests.exceptions.Timeout as e:
-            logger.error(
-                f"_make_request: Request timed out after 30s: {e}"
-            )
+            logger.error(f"_make_request: Request timed out after 30s: {e}")
             raise AppStoreConnectError(f"Request failed: {e}")
         except requests.exceptions.RequestException as e:
             logger.error(f"_make_request: Request failed: {e}")
@@ -199,9 +189,7 @@ class AppStoreConnectAPI:
             except Exception:
                 error_msg = response.text
             logging.error(f"API Error {response.status_code}: {error_msg}")
-            raise AppStoreConnectError(
-                f"API Error {response.status_code}: {error_msg}"
-            )
+            raise AppStoreConnectError(f"API Error {response.status_code}: {error_msg}")
 
         return response
 
@@ -552,9 +540,7 @@ class AppStoreConnectAPI:
                     "platform": platform,
                     "versionString": version_string,
                 },
-                "relationships": {
-                    "app": {"data": {"type": "apps", "id": app_id}}
-                },
+                "relationships": {"app": {"data": {"type": "apps", "id": app_id}}},
             }
         }
         response = self._make_request(
@@ -571,15 +557,11 @@ class AppStoreConnectAPI:
         logger = logging.getLogger(__name__)
 
         params = {"filter[app]": app_id, "include": "appStoreVersionLocalizations"}
-        logger.info(
-            f"get_app_store_versions: Getting versions for app_id={app_id}"
-        )
+        logger.info(f"get_app_store_versions: Getting versions for app_id={app_id}")
         logger.info(f"get_app_store_versions: Request params={params}")
 
         try:
-            logger.info(
-                "get_app_store_versions: About to call _make_request"
-            )
+            logger.info("get_app_store_versions: About to call _make_request")
             response = self._make_request(
                 method="GET", endpoint="/appStoreVersions", params=params
             )
@@ -588,9 +570,7 @@ class AppStoreConnectAPI:
                 f"status={response.status_code}"
             )
         except PermissionError as e:
-            logger.error(
-                f"get_app_store_versions: PermissionError: {e}"
-            )
+            logger.error(f"get_app_store_versions: PermissionError: {e}")
             raise  # Re-raise to be caught by caller
         except Exception as e:
             logger.error(
@@ -633,14 +613,11 @@ class AppStoreConnectAPI:
 
     # High-level helper methods
 
-    def update_app_name(
-        self, app_id: str, name: str, locale: str = "en-US"
-    ) -> bool:
+    def update_app_name(self, app_id: str, name: str, locale: str = "en-US") -> bool:
         """Update app name for a specific locale."""
         if len(name) > 30:
             raise ValidationError(
-                f"App name too long ({len(name)} chars). "
-                f"Maximum is 30 characters."
+                f"App name too long ({len(name)} chars). " f"Maximum is 30 characters."
             )
 
         # Get app info ID
@@ -770,9 +747,7 @@ class AppStoreConnectAPI:
                     loc["id"], {"description": description}
                 )
 
-        raise NotFoundError(
-            f"Version localization {locale} not found for app {app_id}"
-        )
+        raise NotFoundError(f"Version localization {locale} not found for app {app_id}")
 
     def update_app_keywords(
         self, app_id: str, keywords: str, locale: str = "en-US"
@@ -807,9 +782,7 @@ class AppStoreConnectAPI:
                     loc["id"], {"keywords": keywords}
                 )
 
-        raise NotFoundError(
-            f"Version localization {locale} not found for app {app_id}"
-        )
+        raise NotFoundError(f"Version localization {locale} not found for app {app_id}")
 
     def update_promotional_text(
         self, app_id: str, promo_text: str, locale: str = "en-US"
@@ -844,9 +817,7 @@ class AppStoreConnectAPI:
                     loc["id"], {"promotionalText": promo_text}
                 )
 
-        raise NotFoundError(
-            f"Version localization {locale} not found for app {app_id}"
-        )
+        raise NotFoundError(f"Version localization {locale} not found for app {app_id}")
 
     def get_current_metadata(self, app_id: str) -> Dict:
         """Get comprehensive metadata for an app including both app-level and version-level info."""  # noqa: E501
