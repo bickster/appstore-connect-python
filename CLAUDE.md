@@ -26,10 +26,10 @@ This file provides guidance to Claude AI when working with code in this reposito
 
 ## Testing
 
-- Run tests with: `pytest`
-- Check coverage with: `pytest --cov=appstore_connect`
-- Run type checking with: `mypy src/appstore_connect`
-- Format code with: `black src/appstore_connect tests`
+- Run tests with: `python -m pytest`
+- Check coverage with: `python -m pytest --cov=appstore_connect`
+- Run type checking with: `python -m mypy src/appstore_connect`
+- Format code with: `python -m black src/appstore_connect tests`
 
 ## Common Tasks
 
@@ -67,28 +67,28 @@ This file provides guidance to Claude AI when working with code in this reposito
 pip install -e .[dev]
 
 # Run all tests
-pytest
+python -m pytest
 
 # Run tests with verbose output
-pytest -v --tb=long
+python -m pytest -v --tb=long
 
 # Run specific test file
-pytest tests/test_client.py
+python -m pytest tests/test_client.py
 
 # Check code coverage
-pytest --cov=appstore_connect --cov-report=html --cov-report=term
+python -m pytest --cov=appstore_connect --cov-report=html --cov-report=term
 
 # Format code
-black src/appstore_connect tests
+python -m black src/appstore_connect tests
 
 # Check formatting without making changes
-black --check src/appstore_connect tests
+python -m black --check src/appstore_connect tests
 
 # Run linting checks (matching GitHub Actions)
-flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503
+python -m flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503
 
 # Type checking
-mypy src/appstore_connect
+python -m mypy src/appstore_connect
 
 # Build package
 python -m build
@@ -99,10 +99,10 @@ find . -type d -name __pycache__ -exec rm -rf {} +
 find . -type f -name "*.pyc" -delete
 
 # Run all checks (lint + type-check + tests) - matching GitHub Actions
-black --check src/appstore_connect tests && \
-flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503 && \
-mypy src/appstore_connect && \
-pytest
+python -m black --check src/appstore_connect tests && \
+python -m flake8 src/appstore_connect tests --max-line-length=100 --extend-ignore=E203,W503 && \
+python -m mypy src/appstore_connect && \
+python -m pytest
 
 # Or use the build script which runs all checks
 ./build_and_upload.sh
