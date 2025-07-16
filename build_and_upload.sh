@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Manual build and upload script for appstore-connect-client
+# Usage: ./build_and_upload.sh [--no-upload]
 
 set -e
 
@@ -10,7 +11,14 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}Building and uploading appstore-connect-client to PyPI${NC}"
+# Check for --no-upload flag
+NO_UPLOAD=false
+if [[ "$1" == "--no-upload" ]]; then
+    NO_UPLOAD=true
+    echo -e "${GREEN}Building appstore-connect-client (no upload)${NC}"
+else
+    echo -e "${GREEN}Building and uploading appstore-connect-client to PyPI${NC}"
+fi
 
 # Check for uncommitted changes
 if [ -n "$(git status --porcelain)" ]; then
@@ -25,8 +33,8 @@ if [ -n "$(git status --porcelain)" ]; then
     fi
 fi
 
-# Check if .pypirc exists
-if [ ! -f ~/.pypirc ]; then
+# Check if .pypirc exists (only if uploading)
+if [ "$NO_UPLOAD" = false ] && [ ! -f ~/.pypirc ]; then
     echo -e "${RED}Error: ~/.pypirc not found${NC}"
     echo "Please create ~/.pypirc with your PyPI credentials"
     echo "You can use .pypirc.template as a reference"
@@ -66,24 +74,31 @@ rm -rf dist/ build/ *.egg-info
 echo -e "${YELLOW}Building package...${NC}"
 python3 -m build
 
-# Display what will be uploaded
-echo -e "${YELLOW}The following files will be uploaded:${NC}"
+# Display built files
+echo -e "${YELLOW}The following files were built:${NC}"
 ls -la dist/
 
-# Confirm upload
-echo ""
-read -p "Do you want to upload to PyPI? (y/N) " -n 1 -r
-echo ""
-if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-    echo -e "${YELLOW}Upload cancelled${NC}"
-    exit 0
+if [ "$NO_UPLOAD" = true ]; then
+    echo -e "${GREEN}✅ Build completed successfully!${NC}"
+    echo ""
+    echo "Built files are in the dist/ directory"
+    echo "To upload later, run: python3 -m twine upload dist/*"
+else
+    # Confirm upload
+    echo ""
+    read -p "Do you want to upload to PyPI? (y/N) " -n 1 -r
+    echo ""
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo -e "${YELLOW}Upload cancelled${NC}"
+        exit 0
+    fi
+
+    # Upload to PyPI
+    echo -e "${YELLOW}Uploading to PyPI...${NC}"
+    python3 -m twine upload dist/*
+
+    echo -e "${GREEN}✅ Successfully uploaded to PyPI!${NC}"
+    echo ""
+    echo "You can now install the package with:"
+    echo "  pip install appstore-connect-client"
 fi
-
-# Upload to PyPI
-echo -e "${YELLOW}Uploading to PyPI...${NC}"
-python3 -m twine upload dist/*
-
-echo -e "${GREEN}✅ Successfully uploaded to PyPI!${NC}"
-echo ""
-echo "You can now install the package with:"
-echo "  pip install appstore-connect-client"
