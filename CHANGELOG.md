@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-01-16
+
+### Added
+- Automatic GitHub release creation in CI/CD pipeline
+- Changelog validation in release script
+- Support for pyproject.toml version updates
+
+### Changed
+- Updated release script to check for CHANGELOG.md entry before proceeding
+- Enhanced GitHub Actions workflow to create releases with changelog notes
+- Updated RELEASE_GUIDE.md to reflect automated release process
+
+### Fixed
+- GitHub Actions workflow now properly triggers on version tags
+
 ## [1.0.1] - 2025-01-16
 
 ### Fixed
