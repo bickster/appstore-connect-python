@@ -136,31 +136,23 @@ class MetadataManager:
                 try:
                     if field == "name":
                         if validate and len(value) > 30:
-                            raise ValidationError(
-                                f"App name too long: {len(value)} chars (max 30)"
-                            )
+                            raise ValidationError(f"App name too long: {len(value)} chars (max 30)")
                         results[field] = self.api.update_app_name(app_id, value, locale)
                     elif field == "subtitle":
                         if validate and len(value) > 30:
                             raise ValidationError(
                                 f"App subtitle too long: {len(value)} chars (max 30)"
                             )
-                        results[field] = self.api.update_app_subtitle(
-                            app_id, value, locale
-                        )
+                        results[field] = self.api.update_app_subtitle(app_id, value, locale)
                     elif field == "privacy_url":
-                        results[field] = self.api.update_privacy_url(
-                            app_id, value, locale
-                        )
+                        results[field] = self.api.update_privacy_url(app_id, value, locale)
                 except Exception as e:
                     results[field] = False
                     print(f"Failed to update {field}: {e}")
 
         # Handle version-level updates (requires editable version)
         version_level_fields = ["description", "keywords", "promotional_text"]
-        version_updates = {
-            k: v for k, v in updates.items() if k in version_level_fields
-        }
+        version_updates = {k: v for k, v in updates.items() if k in version_level_fields}
 
         if version_updates:
             # Check for editable version
@@ -180,34 +172,26 @@ class MetadataManager:
                                 raise ValidationError(
                                     f"Description too long: {len(value)} chars (max 4000)"
                                 )
-                            results[field] = self.api.update_app_description(
-                                app_id, value, locale
-                            )
+                            results[field] = self.api.update_app_description(app_id, value, locale)
                         elif field == "keywords":
                             if validate and len(value) > 100:
                                 raise ValidationError(
                                     f"Keywords too long: {len(value)} chars (max 100)"
                                 )
-                            results[field] = self.api.update_app_keywords(
-                                app_id, value, locale
-                            )
+                            results[field] = self.api.update_app_keywords(app_id, value, locale)
                         elif field == "promotional_text":
                             if validate and len(value) > 170:
                                 raise ValidationError(
                                     f"Promotional text too long: {len(value)} chars (max 170)"
                                 )
-                            results[field] = self.api.update_promotional_text(
-                                app_id, value, locale
-                            )
+                            results[field] = self.api.update_promotional_text(app_id, value, locale)
                     except Exception as e:
                         results[field] = False
                         print(f"Failed to update {field}: {e}")
 
         # Format return value to match expected structure
         updated = [field for field, success in results.items() if success]
-        errors = {
-            field: "Update failed" for field, success in results.items() if not success
-        }
+        errors = {field: "Update failed" for field, success in results.items() if not success}
 
         return {
             "success": all(results.values()) if results else True,
@@ -342,9 +326,7 @@ class MetadataManager:
                         results["skipped"].append(app["id"])
                     else:
                         # Generate next version (simple increment)
-                        current_version = editable_version["attributes"].get(
-                            "versionString", "1.0"
-                        )
+                        current_version = editable_version["attributes"].get("versionString", "1.0")
                         # Simple version increment logic (you may want to customize)
                         parts = current_version.split(".")
                         if len(parts) >= 2:
@@ -363,15 +345,12 @@ class MetadataManager:
                     existing_version_strings = []
                     if existing_versions and "data" in existing_versions:
                         existing_version_strings = [
-                            v["attributes"]["versionString"]
-                            for v in existing_versions["data"]
+                            v["attributes"]["versionString"] for v in existing_versions["data"]
                         ]
 
                     if version_string in existing_version_strings:
                         results["skipped"].append(app_id)
-                        results["errors"][
-                            app_id
-                        ] = f"Version {version_string} already exists"
+                        results["errors"][app_id] = f"Version {version_string} already exists"
                         continue
 
                     if dry_run:
@@ -379,15 +358,11 @@ class MetadataManager:
                         results["updated"].append(app_id)
                     else:
                         # Create the version
-                        new_version = self.api.create_app_store_version(
-                            app_id, version_string
-                        )
+                        new_version = self.api.create_app_store_version(app_id, version_string)
                         if new_version:
                             results["updated"].append(app_id)
                         else:
-                            results["errors"][
-                                app_id
-                            ] = f"Failed to create version {version_string}"
+                            results["errors"][app_id] = f"Failed to create version {version_string}"
 
                 except Exception as e:
                     results["errors"][app_id] = str(e)
@@ -436,17 +411,14 @@ class MetadataManager:
                         "app_level_locales": list(app_localizations.keys()),
                         "version_level_locales": list(version_localizations.keys()),
                         "total_locales": len(
-                            set(app_localizations.keys())
-                            | set(version_localizations.keys())
+                            set(app_localizations.keys()) | set(version_localizations.keys())
                         ),
                         "missing_app_level": [],  # type: ignore[dict-item]
                         "missing_version_level": [],  # type: ignore[dict-item]
                     }
 
                     # Check for missing localizations
-                    all_locales = set(app_localizations.keys()) | set(
-                        version_localizations.keys()
-                    )
+                    all_locales = set(app_localizations.keys()) | set(version_localizations.keys())
                     for locale in all_locales:
                         if locale not in app_localizations:
                             results[app_id]["missing_app_level"].append(
@@ -527,17 +499,15 @@ class MetadataManager:
                         # Check for editable version
                         editable_version = app_data.get("editable_version")
                         if editable_version and isinstance(editable_version, dict):
-                            row["editable_version"] = editable_version.get(
-                                "attributes", {}
-                            ).get("versionString")
-                            row["editable_state"] = editable_version.get(
-                                "attributes", {}
-                            ).get("appStoreState")
+                            row["editable_version"] = editable_version.get("attributes", {}).get(
+                                "versionString"
+                            )
+                            row["editable_state"] = editable_version.get("attributes", {}).get(
+                                "appStoreState"
+                            )
 
                         # Version-level localizations
-                        version_localizations = metadata.get(
-                            "version_localizations", {}
-                        )
+                        version_localizations = metadata.get("version_localizations", {})
                         for locale, data in version_localizations.items():
                             row[f"description_{locale}"] = truncate_string(
                                 data.get("description", ""), 100

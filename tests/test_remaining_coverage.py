@@ -55,9 +55,7 @@ class TestMetadataErrorPaths:
         # Make update_app_name raise an exception
         mock_api.update_app_name.side_effect = Exception("API Error")
 
-        result = manager.update_app_listing(
-            app_id="123456789", updates={"name": "New Name"}
-        )
+        result = manager.update_app_listing(app_id="123456789", updates={"name": "New Name"})
 
         # Should catch and handle the exception
         assert result["success"] is False
@@ -149,14 +147,10 @@ class TestMetadataErrorPaths:
         mock_api.get_app_store_versions.return_value = {"data": []}
 
         # Mock version creation
-        mock_api.create_app_store_version.return_value = {
-            "data": {"id": "new_version_123"}
-        }
+        mock_api.create_app_store_version.return_value = {"data": {"id": "new_version_123"}}
 
         # Test with no app_versions provided (should auto-generate)
-        results = manager.prepare_version_releases(
-            release_notes="New features!", dry_run=False
-        )
+        results = manager.prepare_version_releases(release_notes="New features!", dry_run=False)
 
         # Should have one app updated and one skipped
         assert len(results["updated"]) == 1

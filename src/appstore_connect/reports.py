@@ -67,11 +67,7 @@ class ReportProcessor:
         if "Apple Identifier" in sales_df.columns:
             app_groups = sales_df.groupby("Apple Identifier")
             for app_id, group in app_groups:
-                app_name = (
-                    group["Title"].iloc[0]
-                    if "Title" in group.columns
-                    else f"App {app_id}"
-                )
+                app_name = group["Title"].iloc[0] if "Title" in group.columns else f"App {app_id}"
                 by_app[str(app_id)] = {
                     "name": app_name,
                     "units": int(group["Units"].sum()),
@@ -81,9 +77,7 @@ class ReportProcessor:
                         else 0.0
                     ),
                     "countries": (
-                        group["Country Code"].nunique()
-                        if "Country Code" in group.columns
-                        else 0
+                        group["Country Code"].nunique() if "Country Code" in group.columns else 0
                     ),
                 }
 
@@ -130,18 +124,14 @@ class ReportProcessor:
         top_performers = {}
         if by_app:
             # Top apps by revenue
-            top_by_revenue = sorted(
-                by_app.items(), key=lambda x: x[1]["revenue"], reverse=True
-            )[:5]
+            top_by_revenue = sorted(by_app.items(), key=lambda x: x[1]["revenue"], reverse=True)[:5]
             top_performers["by_revenue"] = [
                 {"app_id": app_id, "name": data["name"], "revenue": data["revenue"]}
                 for app_id, data in top_by_revenue
             ]
 
             # Top apps by units
-            top_by_units = sorted(
-                by_app.items(), key=lambda x: x[1]["units"], reverse=True
-            )[:5]
+            top_by_units = sorted(by_app.items(), key=lambda x: x[1]["units"], reverse=True)[:5]
             top_performers["by_units"] = [
                 {"app_id": app_id, "name": data["name"], "units": data["units"]}
                 for app_id, data in top_by_units
@@ -149,9 +139,9 @@ class ReportProcessor:
 
         if by_country:
             # Top countries by revenue
-            top_countries = sorted(
-                by_country.items(), key=lambda x: x[1]["revenue"], reverse=True
-            )[:5]
+            top_countries = sorted(by_country.items(), key=lambda x: x[1]["revenue"], reverse=True)[
+                :5
+            ]
             top_performers["by_country"] = [
                 {"country": country, "revenue": data["revenue"], "units": data["units"]}
                 for country, data in top_countries
@@ -186,12 +176,8 @@ class ReportProcessor:
         reports = self.api.fetch_multiple_days(days, start_date, end_date)
 
         # Combine subscription reports
-        sub_df = combine_dataframes(
-            reports.get("subscriptions", []), sort_by="report_date"
-        )
-        event_df = combine_dataframes(
-            reports.get("subscription_events", []), sort_by="report_date"
-        )
+        sub_df = combine_dataframes(reports.get("subscriptions", []), sort_by="report_date")
+        event_df = combine_dataframes(reports.get("subscription_events", []), sort_by="report_date")
 
         analysis: Dict[str, Any] = {
             "subscription_summary": {},
@@ -213,9 +199,7 @@ class ReportProcessor:
             app_groups = sub_df.groupby("App Apple ID")
             for app_id, group in app_groups:
                 app_name = (
-                    group["App Name"].iloc[0]
-                    if "App Name" in group.columns
-                    else f"App {app_id}"
+                    group["App Name"].iloc[0] if "App Name" in group.columns else f"App {app_id}"
                 )
                 analysis["by_app"][str(app_id)] = {
                     "name": app_name,
@@ -225,9 +209,7 @@ class ReportProcessor:
                         else 0
                     ),
                     "total_revenue": (
-                        float(group["Proceeds"].sum())
-                        if "Proceeds" in group.columns
-                        else 0.0
+                        float(group["Proceeds"].sum()) if "Proceeds" in group.columns else 0.0
                     ),
                 }
 
@@ -294,9 +276,7 @@ class ReportProcessor:
         comparison_start = comparison_end - timedelta(days=comparison_days - 1)
 
         # Fetch data for both periods
-        current_summary = self.get_sales_summary(
-            start_date=current_start, end_date=current_end
-        )
+        current_summary = self.get_sales_summary(start_date=current_start, end_date=current_end)
         comparison_summary = self.get_sales_summary(
             start_date=comparison_start, end_date=comparison_end
         )
@@ -361,16 +341,12 @@ class ReportProcessor:
         metric_map = {"revenue": "revenue", "units": "units", "countries": "countries"}
 
         if metric not in metric_map:
-            raise ValidationError(
-                f"Invalid metric. Must be one of: {list(metric_map.keys())}"
-            )
+            raise ValidationError(f"Invalid metric. Must be one of: {list(metric_map.keys())}")
 
         metric_key = metric_map[metric]
 
         # Sort apps by metric
-        ranked_apps = sorted(
-            by_app.items(), key=lambda x: x[1].get(metric_key, 0), reverse=True
-        )
+        ranked_apps = sorted(by_app.items(), key=lambda x: x[1].get(metric_key, 0), reverse=True)
 
         # Format results
         results = []

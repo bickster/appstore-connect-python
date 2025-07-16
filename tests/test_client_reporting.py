@@ -39,9 +39,7 @@ class TestReportDateFormatting:
         mock_response.status_code = 200
         mock_response.content = self._create_gzip_content("header\ndata")
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_response
-        ) as mock_request:
+        with patch.object(api_client, "_make_request", return_value=mock_response) as mock_request:
             with patch.object(api_client, "_generate_token", return_value="token"):
                 api_client.get_sales_report(test_date, frequency="WEEKLY")
 
@@ -192,9 +190,7 @@ class TestReportParsing:
     def test_app_id_filtering_subscription_report(self, api_client):
         """Test app ID filtering for subscription reports (App Apple ID column)."""
         # Create test data with App Apple ID column
-        csv_data = (
-            "App Apple ID\tActive Subscriptions\n123456\t100\n789012\t200\n999999\t300"
-        )
+        csv_data = "App Apple ID\tActive Subscriptions\n123456\t100\n789012\t200\n999999\t300"
 
         buf = io.BytesIO()
         with gzip.GzipFile(fileobj=buf, mode="wb") as gz:
@@ -206,9 +202,7 @@ class TestReportParsing:
 
         with patch.object(api_client, "_make_request", return_value=mock_response):
             with patch.object(api_client, "_generate_token", return_value="token"):
-                df = api_client.get_sales_report(
-                    date.today(), report_type="SUBSCRIPTION"
-                )
+                df = api_client.get_sales_report(date.today(), report_type="SUBSCRIPTION")
 
                 # Should only include configured app IDs
                 assert len(df) == 2
@@ -230,9 +224,7 @@ class TestFinancialReports:
         mock_response.status_code = 200
         mock_response.content = buf.getvalue()
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_response
-        ) as mock_request:
+        with patch.object(api_client, "_make_request", return_value=mock_response) as mock_request:
             with patch.object(api_client, "_generate_token", return_value="token"):
                 df = api_client.get_financial_report(2023, 6)
 
@@ -256,9 +248,7 @@ class TestFinancialReports:
         mock_response.status_code = 200
         mock_response.content = self._create_gzip_content("header\ndata")
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_response
-        ) as mock_request:
+        with patch.object(api_client, "_make_request", return_value=mock_response) as mock_request:
             with patch.object(api_client, "_generate_token", return_value="token"):
                 api_client.get_financial_report(2023, 12, region="US")
 
@@ -306,9 +296,7 @@ class TestSubscriptionEventReports:
 
     def test_get_subscription_event_report(self, api_client):
         """Test fetching subscription event reports."""
-        csv_data = (
-            "Event\tApp Apple ID\tQuantity\nSubscribe\t123456\t5\nCancel\t789012\t2"
-        )
+        csv_data = "Event\tApp Apple ID\tQuantity\nSubscribe\t123456\t5\nCancel\t789012\t2"
 
         buf = io.BytesIO()
         with gzip.GzipFile(fileobj=buf, mode="wb") as gz:
@@ -318,9 +306,7 @@ class TestSubscriptionEventReports:
         mock_response.status_code = 200
         mock_response.content = buf.getvalue()
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_response
-        ) as mock_request:
+        with patch.object(api_client, "_make_request", return_value=mock_response) as mock_request:
             with patch.object(api_client, "_generate_token", return_value="token"):
                 df = api_client.get_subscription_event_report(date(2023, 6, 15))
 
@@ -438,9 +424,7 @@ class TestMultipleDaysFetching:
                     # Set "today" to a known date
                     mock_now = datetime(2023, 6, 20, 12, 0, 0, tzinfo=timezone.utc)
                     mock_datetime.now.return_value = mock_now
-                    mock_datetime.datetime = (
-                        datetime  # Preserve the actual datetime class
-                    )
+                    mock_datetime.datetime = datetime  # Preserve the actual datetime class
 
                     # Return daily for recent, weekly for older
                     def side_effect(*args, **kwargs):
@@ -460,19 +444,13 @@ class TestMultipleDaysFetching:
 
                     # Check that both frequencies were used
                     has_daily = any(
-                        df.iloc[0]["frequency"] == "DAILY"
-                        for df in all_sales
-                        if not df.empty
+                        df.iloc[0]["frequency"] == "DAILY" for df in all_sales if not df.empty
                     )
                     has_weekly = any(
-                        df.iloc[0]["frequency"] == "WEEKLY"
-                        for df in all_sales
-                        if not df.empty
+                        df.iloc[0]["frequency"] == "WEEKLY" for df in all_sales if not df.empty
                     )
 
-                    assert (
-                        has_daily or has_weekly
-                    )  # At least one type should be present
+                    assert has_daily or has_weekly  # At least one type should be present
 
     def test_fetch_multiple_days_with_start_end_dates(self, api_client):
         """Test fetch_multiple_days with start/end dates (uses _fetch_date_range)."""
@@ -507,9 +485,7 @@ class TestReportVersionMapping:
         mock_response.status_code = 200
         mock_response.content = self._create_gzip_content("header\ndata")
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_response
-        ) as mock_request:
+        with patch.object(api_client, "_make_request", return_value=mock_response) as mock_request:
             with patch.object(api_client, "_generate_token", return_value="token"):
                 api_client.get_sales_report(date.today(), report_type="SUBSCRIPTION")
 
@@ -524,9 +500,7 @@ class TestReportVersionMapping:
         mock_response.status_code = 200
         mock_response.content = self._create_gzip_content("header\ndata")
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_response
-        ) as mock_request:
+        with patch.object(api_client, "_make_request", return_value=mock_response) as mock_request:
             with patch.object(api_client, "_generate_token", return_value="token"):
                 api_client.get_sales_report(date.today(), report_type="SUBSCRIBER")
 

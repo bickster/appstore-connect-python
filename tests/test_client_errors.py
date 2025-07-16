@@ -82,9 +82,7 @@ class TestHTTPStatusHandling:
         """Test 429 rate limit error."""
         mock_response = Mock()
         mock_response.status_code = 429
-        mock_response.json.return_value = {
-            "errors": [{"detail": "Rate limit exceeded"}]
-        }
+        mock_response.json.return_value = {"errors": [{"detail": "Rate limit exceeded"}]}
 
         with patch("requests.request", return_value=mock_response):
             with patch.object(api_client, "_generate_token", return_value="token"):
@@ -97,9 +95,7 @@ class TestHTTPStatusHandling:
         """Test generic error with well-formed JSON error response."""
         mock_response = Mock()
         mock_response.status_code = 400
-        mock_response.json.return_value = {
-            "errors": [{"detail": "Invalid request parameters"}]
-        }
+        mock_response.json.return_value = {"errors": [{"detail": "Invalid request parameters"}]}
         mock_response.text = "Raw response text"
 
         with patch("requests.request", return_value=mock_response):
@@ -107,9 +103,7 @@ class TestHTTPStatusHandling:
                 with pytest.raises(AppStoreConnectError) as exc_info:
                     api_client._make_request(endpoint="/test")
 
-                assert "API Error 400: Invalid request parameters" in str(
-                    exc_info.value
-                )
+                assert "API Error 400: Invalid request parameters" in str(exc_info.value)
 
     def test_generic_error_with_malformed_json(self, api_client):
         """Test generic error when JSON parsing fails."""
@@ -159,9 +153,7 @@ class TestHTTPStatusHandling:
         """Test that errors are logged."""
         mock_response = Mock()
         mock_response.status_code = 500
-        mock_response.json.return_value = {
-            "errors": [{"detail": "Server error occurred"}]
-        }
+        mock_response.json.return_value = {"errors": [{"detail": "Server error occurred"}]}
         mock_response.text = "Internal Server Error"
 
         with patch("requests.request", return_value=mock_response):
@@ -258,9 +250,7 @@ class TestEdgeCases:
 
         with patch("requests.request", return_value=mock_response) as mock_request:
             with patch.object(api_client, "_generate_token", return_value="token"):
-                api_client._make_request(
-                    method="POST", endpoint="/test", data=test_data
-                )
+                api_client._make_request(method="POST", endpoint="/test", data=test_data)
 
                 # Check that JSON data was passed
                 call_args = mock_request.call_args
@@ -276,9 +266,7 @@ class TestEdgeCases:
 
         with patch("requests.request", return_value=mock_response) as mock_request:
             with patch.object(api_client, "_generate_token", return_value="token"):
-                api_client._make_request(
-                    method="GET", endpoint="/test", params=test_params
-                )
+                api_client._make_request(method="GET", endpoint="/test", params=test_params)
 
                 # Check that params were passed
                 call_args = mock_request.call_args

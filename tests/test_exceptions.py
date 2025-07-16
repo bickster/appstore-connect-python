@@ -158,9 +158,7 @@ class TestExceptionContext:
 
     def test_rate_limit_context(self):
         """Test rate limit error with retry information."""
-        exc = RateLimitError(
-            "Rate limit exceeded (50 requests/hour). " "Retry after 3600 seconds."
-        )
+        exc = RateLimitError("Rate limit exceeded (50 requests/hour). " "Retry after 3600 seconds.")
         assert "50 requests/hour" in str(exc)
         assert "3600 seconds" in str(exc)
 

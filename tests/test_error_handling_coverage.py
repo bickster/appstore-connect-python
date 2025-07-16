@@ -62,9 +62,7 @@ class TestDateFormatting:
         mock_response.status_code = 200
         mock_response.content = buf.getvalue()
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_response
-        ) as mock_request:
+        with patch.object(api_client, "_make_request", return_value=mock_response) as mock_request:
             with patch.object(api_client, "_generate_token", return_value="token"):
                 api_client.get_sales_report(test_date, frequency="YEARLY")
 
@@ -279,9 +277,7 @@ class TestLocalizationNotFound:
         localizations_response = Mock()
         localizations_response.status_code = 200
         localizations_response.json.return_value = {
-            "data": [
-                {"id": "loc123", "attributes": {"locale": "ja-JP"}}  # Different locale
-            ]
+            "data": [{"id": "loc123", "attributes": {"locale": "ja-JP"}}]  # Different locale
         }
 
         with patch.object(
@@ -331,12 +327,8 @@ class TestVersionLocalizationNotFound:
         localizations_response.status_code = 200
         localizations_response.json.return_value = {"data": []}  # Empty
 
-        with patch.object(
-            api_client, "get_editable_version", return_value=editable_version
-        ):
-            with patch.object(
-                api_client, "_make_request", return_value=localizations_response
-            ):
+        with patch.object(api_client, "get_editable_version", return_value=editable_version):
+            with patch.object(api_client, "_make_request", return_value=localizations_response):
                 with patch.object(api_client, "_generate_token", return_value="token"):
                     with pytest.raises(NotFoundError) as exc_info:
                         api_client.update_app_description("123456", "New description")
@@ -354,17 +346,13 @@ class TestVersionLocalizationNotFound:
         error_response = Mock()
         error_response.status_code = 403
 
-        with patch.object(
-            api_client, "get_editable_version", return_value=editable_version
-        ):
+        with patch.object(api_client, "get_editable_version", return_value=editable_version):
             with patch.object(api_client, "_make_request", return_value=error_response):
                 with patch.object(api_client, "_generate_token", return_value="token"):
                     with pytest.raises(NotFoundError) as exc_info:
                         api_client.update_app_keywords("123456", "keyword1,keyword2")
 
-                    assert "Could not fetch version localizations" in str(
-                        exc_info.value
-                    )
+                    assert "Could not fetch version localizations" in str(exc_info.value)
 
     def test_update_promotional_text_wrong_locale(self, api_client):
         """Test update_promotional_text with wrong locale."""
@@ -384,12 +372,8 @@ class TestVersionLocalizationNotFound:
             ]
         }
 
-        with patch.object(
-            api_client, "get_editable_version", return_value=editable_version
-        ):
-            with patch.object(
-                api_client, "_make_request", return_value=localizations_response
-            ):
+        with patch.object(api_client, "get_editable_version", return_value=editable_version):
+            with patch.object(api_client, "_make_request", return_value=localizations_response):
                 with patch.object(api_client, "_generate_token", return_value="token"):
                     with pytest.raises(NotFoundError) as exc_info:
                         api_client.update_promotional_text(
@@ -411,9 +395,7 @@ class TestCurrentMetadataErrors:
         # App info succeeds
         app_info_response = Mock()
         app_info_response.status_code = 200
-        app_info_response.json.return_value = {
-            "data": {"attributes": {"bundleId": "com.test.app"}}
-        }
+        app_info_response.json.return_value = {"data": {"attributes": {"bundleId": "com.test.app"}}}
 
         # App infos succeeds
         app_infos_response = Mock()

@@ -167,12 +167,8 @@ class TestMetadataManager:
         assert "privacy_url" in result["updated"]
 
         # Verify API calls
-        mock_api.update_app_name.assert_called_once_with(
-            "123456789", "New App Name", "en-US"
-        )
-        mock_api.update_app_subtitle.assert_called_once_with(
-            "123456789", "New Subtitle", "en-US"
-        )
+        mock_api.update_app_name.assert_called_once_with("123456789", "New App Name", "en-US")
+        mock_api.update_app_subtitle.assert_called_once_with("123456789", "New Subtitle", "en-US")
         mock_api.update_privacy_url.assert_called_once_with(
             "123456789", "https://new.com/privacy", "en-US"
         )
@@ -206,9 +202,7 @@ class TestMetadataManager:
         mock_api.update_app_description.assert_called_once_with(
             "123456789", "New description", "en-US"
         )
-        mock_api.update_app_keywords.assert_called_once_with(
-            "123456789", "new,keywords", "en-US"
-        )
+        mock_api.update_app_keywords.assert_called_once_with("123456789", "new,keywords", "en-US")
 
     def test_update_app_listing_version_level_fields_no_editable_version(
         self, metadata_manager, mock_api
@@ -506,9 +500,7 @@ class TestMetadataManager:
         app2_status = result["987654321"]
         assert app2_status["app_name"] == "Test App B"
         assert app2_status["total_locales"] == 1
-        assert app2_status["missing_version_level"] == [
-            "en-US"
-        ]  # No version localizations
+        assert app2_status["missing_version_level"] == ["en-US"]  # No version localizations
 
     @patch("pandas.DataFrame.to_csv")
     def test_export_app_metadata(self, mock_to_csv, metadata_manager, mock_api):
@@ -654,9 +646,7 @@ class TestMetadataManagerErrorHandling:
                 Exception("Validation error"),  # Second app fails
             ]
 
-            result = metadata_manager.batch_update_apps(
-                updates, continue_on_error=False
-            )
+            result = metadata_manager.batch_update_apps(updates, continue_on_error=False)
 
         # Should stop after first error
         assert "123456789" in result["results"]

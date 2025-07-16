@@ -96,9 +96,7 @@ class TestAuthentication:
     @patch("pathlib.Path.exists", return_value=True)
     def test_load_private_key_success(self, mock_exists, mock_open, mock_private_key):
         """Test successful private key loading."""
-        mock_open.return_value.__enter__.return_value.read.return_value = (
-            mock_private_key
-        )
+        mock_open.return_value.__enter__.return_value.read.return_value = mock_private_key
 
         # Create API client with mocked file existence
         api = AppStoreConnectAPI(
@@ -132,9 +130,7 @@ class TestAuthentication:
         self, mock_exists, mock_open, mock_jwt_encode, mock_private_key
     ):
         """Test successful JWT token generation."""
-        mock_open.return_value.__enter__.return_value.read.return_value = (
-            mock_private_key
-        )
+        mock_open.return_value.__enter__.return_value.read.return_value = mock_private_key
         mock_jwt_encode.return_value = "test_token"
 
         api = AppStoreConnectAPI(
@@ -169,9 +165,7 @@ class TestAuthentication:
         self, mock_exists, mock_open, mock_jwt_encode, mock_private_key
     ):
         """Test token generation with JWT encoding failure."""
-        mock_open.return_value.__enter__.return_value.read.return_value = (
-            mock_private_key
-        )
+        mock_open.return_value.__enter__.return_value.read.return_value = mock_private_key
 
         api = AppStoreConnectAPI(
             key_id="test_key",
@@ -191,9 +185,7 @@ class TestSalesReporting:
     @patch("jwt.encode")
     @patch.object(AppStoreConnectAPI, "_make_request")
     @patch("pathlib.Path.exists", return_value=True)
-    def test_get_sales_report_success(
-        self, mock_exists, mock_request, mock_jwt, mock_open
-    ):
+    def test_get_sales_report_success(self, mock_exists, mock_request, mock_jwt, mock_open):
         """Test successful sales report retrieval."""
         # Mock JWT and file reading
         mock_jwt.return_value = "test_token"

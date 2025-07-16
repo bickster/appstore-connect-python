@@ -68,9 +68,7 @@ class TestRemainingClientCoverage:
             else:
                 return pd.DataFrame({"Units": [5]})
 
-        with patch.object(
-            api_client, "get_sales_report", side_effect=mock_get_sales_report
-        ):
+        with patch.object(api_client, "get_sales_report", side_effect=mock_get_sales_report):
             with patch("logging.warning") as mock_warning:
                 results = api_client._fetch_date_range(start_date, end_date)
 
@@ -127,9 +125,7 @@ class TestRemainingClientCoverage:
 
                 return pd.DataFrame()
 
-            with patch.object(
-                api_client, "get_sales_report", side_effect=mock_get_sales_report
-            ):
+            with patch.object(api_client, "get_sales_report", side_effect=mock_get_sales_report):
                 with patch("logging.warning") as mock_warning:
                     # Request 14 days to trigger both daily and weekly fetching
                     results = api_client._fetch_multiple_days_optimized(days=14)
@@ -141,10 +137,7 @@ class TestRemainingClientCoverage:
                     weekly_error_logged = False
                     for call in mock_warning.call_args_list:
                         msg = str(call[0][0])
-                        if (
-                            "Error fetching weekly data" in msg
-                            and "Weekly API is down" in msg
-                        ):
+                        if "Error fetching weekly data" in msg and "Weekly API is down" in msg:
                             weekly_error_logged = True
                             break
 
@@ -174,9 +167,7 @@ class TestRemainingClientCoverage:
         version_localizations_response = Mock()
         version_localizations_response.status_code = 200
         version_localizations_response.json.return_value = {
-            "data": [
-                {"attributes": {"locale": "en-US", "description": "Test description"}}
-            ]
+            "data": [{"attributes": {"locale": "en-US", "description": "Test description"}}]
         }
 
         responses = [
@@ -203,24 +194,18 @@ class TestRemainingClientCoverage:
         # Set up successful responses until versions
         responses = [
             # get_app_info succeeds
-            Mock(
-                status_code=200, json=lambda: {"data": {"attributes": {"name": "App"}}}
-            ),
+            Mock(status_code=200, json=lambda: {"data": {"attributes": {"name": "App"}}}),
             # get_app_infos succeeds
             Mock(status_code=200, json=lambda: {"data": [{"id": "info123"}]}),
             # get_app_info_localizations succeeds
             Mock(
                 status_code=200,
-                json=lambda: {
-                    "data": [{"attributes": {"locale": "en-US", "name": "App Name"}}]
-                },
+                json=lambda: {"data": [{"attributes": {"locale": "en-US", "name": "App Name"}}]},
             ),
             # get_app_store_versions succeeds with data
             Mock(
                 status_code=200,
-                json=lambda: {
-                    "data": [{"id": "ver123", "attributes": {"versionString": "1.0"}}]
-                },
+                json=lambda: {"data": [{"id": "ver123", "attributes": {"versionString": "1.0"}}]},
             ),
             # get_app_store_version_localizations raises NotFoundError
             Mock(status_code=404),

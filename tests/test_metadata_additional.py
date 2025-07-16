@@ -47,9 +47,7 @@ class TestMetadataManagerEdgeCases:
             "attributes": {"appStoreState": "PREPARE_FOR_SUBMISSION"},
         }
         mock_api.get_app_store_version_localizations.return_value = {
-            "data": [
-                {"id": "loc123", "attributes": {"locale": "fr-FR"}}  # Different locale
-            ]
+            "data": [{"id": "loc123", "attributes": {"locale": "fr-FR"}}]  # Different locale
         }
 
         updates = {"name": "New Name", "description": "New Description"}
@@ -71,9 +69,7 @@ class TestMetadataManagerEdgeCases:
 
         updates = {"123456789": {"name": "App 1"}, "987654321": {"name": "App 2"}}
 
-        results = metadata_manager.batch_update_apps(
-            updates=updates, continue_on_error=True
-        )
+        results = metadata_manager.batch_update_apps(updates=updates, continue_on_error=True)
 
         # Should have one success and one error
         assert "123456789" in results["results"]
@@ -115,9 +111,7 @@ class TestMetadataManagerEdgeCases:
         assert results["123456789"]["new_name"] == "MyApp Pro Pro"
         assert results["123456789"]["changed"] is True
 
-    def test_prepare_version_releases_no_eligible_versions(
-        self, metadata_manager, mock_api
-    ):
+    def test_prepare_version_releases_no_eligible_versions(self, metadata_manager, mock_api):
         """Test prepare_version_releases with no eligible versions."""
         # Mock portfolio
         mock_api.get_apps.return_value = {
@@ -151,9 +145,7 @@ class TestMetadataManagerEdgeCases:
         with pytest.raises(AppStorePermissionError):
             metadata_manager.get_localization_status(["123456789"])
 
-    def test_export_app_metadata_with_permission_error(
-        self, metadata_manager, mock_api, tmp_path
-    ):
+    def test_export_app_metadata_with_permission_error(self, metadata_manager, mock_api, tmp_path):
         """Test export_app_metadata when API has permission errors."""
         # Mock portfolio fetch failure with general exception
         mock_api.get_apps.side_effect = Exception("No metadata access")
@@ -177,9 +169,7 @@ class TestMetadataManagerEdgeCases:
 
         # Test with empty string app_id
         with pytest.raises(ValidationError):
-            metadata_manager.update_app_listing(
-                app_id="", updates={"name": "Test"}, validate=True
-            )
+            metadata_manager.update_app_listing(app_id="", updates={"name": "Test"}, validate=True)
 
         # Test batch update with invalid locale format
         with pytest.raises(ValidationError):

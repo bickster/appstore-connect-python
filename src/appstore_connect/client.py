@@ -102,9 +102,7 @@ class AppStoreConnectAPI:
         headers = {"alg": "ES256", "kid": self.key_id, "typ": "JWT"}
 
         try:
-            self._token = jwt.encode(
-                payload, private_key, algorithm="ES256", headers=headers
-            )
+            self._token = jwt.encode(payload, private_key, algorithm="ES256", headers=headers)
         except Exception as e:
             raise AuthenticationError(f"Failed to generate JWT token: {e}")
 
@@ -118,9 +116,7 @@ class AppStoreConnectAPI:
         logger = logging.getLogger(__name__)
         logger.info("_get_headers: Generating token...")
         token = self._generate_token()
-        logger.info(
-            f"_get_headers: Token generated, " f"length={len(token) if token else 0}"
-        )
+        logger.info(f"_get_headers: Token generated, " f"length={len(token) if token else 0}")
         return {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
@@ -161,9 +157,7 @@ class AppStoreConnectAPI:
                 json=data,
                 timeout=30,
             )
-            logger.info(
-                f"_make_request: Response received - " f"status={response.status_code}"
-            )
+            logger.info(f"_make_request: Response received - " f"status={response.status_code}")
         except requests.exceptions.Timeout as e:
             logger.error(f"_make_request: Request timed out after 30s: {e}")
             raise AppStoreConnectError(f"Request failed: {e}")
@@ -183,9 +177,7 @@ class AppStoreConnectAPI:
         elif response.status_code >= 400:
             try:
                 error_data = response.json()
-                error_msg = error_data.get("errors", [{}])[0].get(
-                    "detail", response.text
-                )
+                error_msg = error_data.get("errors", [{}])[0].get("detail", response.text)
             except Exception:
                 error_msg = response.text
             logging.error(f"API Error {response.status_code}: {error_msg}")
@@ -240,9 +232,7 @@ class AppStoreConnectAPI:
             date_str = report_date.strftime("%Y-%m-%d")
         elif frequency == "WEEKLY":
             # For weekly reports, Apple expects the date of the Sunday that starts the week
-            days_since_sunday = (
-                report_date.weekday() + 1 if report_date.weekday() != 6 else 0
-            )
+            days_since_sunday = report_date.weekday() + 1 if report_date.weekday() != 6 else 0
             sunday = report_date - timedelta(days=days_since_sunday)
             date_str = sunday.strftime("%Y-%m-%d")
         elif frequency == "MONTHLY":
@@ -288,9 +278,7 @@ class AppStoreConnectAPI:
 
         return df  # type: ignore[no-any-return]
 
-    def get_financial_report(
-        self, year: int, month: int, region: str = "ZZ"
-    ) -> pd.DataFrame:
+    def get_financial_report(self, year: int, month: int, region: str = "ZZ") -> pd.DataFrame:
         """
         Fetch financial report for a specific month.
 
@@ -321,9 +309,7 @@ class AppStoreConnectAPI:
         except Exception as e:
             raise AppStoreConnectError(f"Failed to parse financial report: {e}")
 
-    def get_subscription_report(
-        self, report_date: Union[datetime, date]
-    ) -> pd.DataFrame:
+    def get_subscription_report(self, report_date: Union[datetime, date]) -> pd.DataFrame:
         """Fetch subscription report for a specific date."""
         return self.get_sales_report(
             report_date=report_date,
@@ -332,9 +318,7 @@ class AppStoreConnectAPI:
             frequency="DAILY",
         )
 
-    def get_subscription_event_report(
-        self, report_date: Union[datetime, date]
-    ) -> pd.DataFrame:
+    def get_subscription_event_report(self, report_date: Union[datetime, date]) -> pd.DataFrame:
         """Fetch subscription event report for a specific date."""
         return self.get_sales_report(
             report_date=report_date,
@@ -364,9 +348,7 @@ class AppStoreConnectAPI:
             return self._fetch_date_range(start_date, end_date)
         return self._fetch_multiple_days_optimized(days)
 
-    def _fetch_date_range(
-        self, start_date: date, end_date: date
-    ) -> Dict[str, List[pd.DataFrame]]:
+    def _fetch_date_range(self, start_date: date, end_date: date) -> Dict[str, List[pd.DataFrame]]:
         """Fetch reports for a specific date range."""
         results: Dict[str, List[pd.DataFrame]] = {
             "sales": [],
@@ -378,9 +360,7 @@ class AppStoreConnectAPI:
         while current_date <= end_date:
             for report_type in ["SALES", "SUBSCRIPTION", "SUBSCRIPTION_EVENT"]:
                 try:
-                    df = self.get_sales_report(
-                        current_date, report_type, "SUMMARY", "DAILY"
-                    )
+                    df = self.get_sales_report(current_date, report_type, "SUMMARY", "DAILY")
                     if df is not None and not df.empty:
                         key = {
                             "SALES": "sales",
@@ -390,17 +370,13 @@ class AppStoreConnectAPI:
                         results[key].append(df)
                 except Exception as e:
                     if "404" not in str(e):
-                        logging.warning(
-                            f"Error fetching {report_type} for {current_date}: {e}"
-                        )
+                        logging.warning(f"Error fetching {report_type} for {current_date}: {e}")
 
             current_date += timedelta(days=1)
 
         return results
 
-    def _fetch_multiple_days_optimized(
-        self, days: int = 30
-    ) -> Dict[str, List[pd.DataFrame]]:
+    def _fetch_multiple_days_optimized(self, days: int = 30) -> Dict[str, List[pd.DataFrame]]:
         """Fetch reports using smart frequency selection to minimize API calls."""
         results: Dict[str, List[pd.DataFrame]] = {
             "sales": [],
@@ -437,9 +413,7 @@ class AppStoreConnectAPI:
                             df["frequency"] = "DAILY"
                             results[result_key].append(df)
                 except Exception as e:
-                    logging.warning(
-                        f"Error fetching daily data for {current_date}: {e}"
-                    )
+                    logging.warning(f"Error fetching daily data for {current_date}: {e}")
 
                 current_date += timedelta(days=1)
 
@@ -449,9 +423,7 @@ class AppStoreConnectAPI:
             weekly_start = max(start_date, end_date - timedelta(days=30))
 
             if weekly_start <= weekly_end:
-                current_sunday = weekly_start - timedelta(
-                    days=(weekly_start.weekday() + 1) % 7
-                )
+                current_sunday = weekly_start - timedelta(days=(weekly_start.weekday() + 1) % 7)
 
                 while current_sunday <= weekly_end:
                     try:
@@ -551,9 +523,7 @@ class AppStoreConnectAPI:
                 "relationships": {"app": {"data": {"type": "apps", "id": app_id}}},
             }
         }
-        response = self._make_request(
-            method="POST", endpoint="/appStoreVersions", data=data
-        )
+        response = self._make_request(method="POST", endpoint="/appStoreVersions", data=data)
         if response.status_code == 201:
             return response.json()  # type: ignore[no-any-return]
         return None
@@ -570,20 +540,16 @@ class AppStoreConnectAPI:
 
         try:
             logger.info("get_app_store_versions: About to call _make_request")
-            response = self._make_request(
-                method="GET", endpoint="/appStoreVersions", params=params
-            )
+            response = self._make_request(method="GET", endpoint="/appStoreVersions", params=params)
             logger.info(
-                f"get_app_store_versions: Received response "
-                f"status={response.status_code}"
+                f"get_app_store_versions: Received response " f"status={response.status_code}"
             )
         except PermissionError as e:
             logger.error(f"get_app_store_versions: PermissionError: {e}")
             raise  # Re-raise to be caught by caller
         except Exception as e:
             logger.error(
-                f"get_app_store_versions: Exception during request: "
-                f"{type(e).__name__}: {e}"
+                f"get_app_store_versions: Exception during request: " f"{type(e).__name__}: {e}"
             )
             raise
 
@@ -601,9 +567,7 @@ class AppStoreConnectAPI:
             return response.json()  # type: ignore[no-any-return]
         return None
 
-    def update_app_store_version_localization(
-        self, localization_id: str, data: Dict
-    ) -> bool:
+    def update_app_store_version_localization(self, localization_id: str, data: Dict) -> bool:
         """Update App Store version localization (description, keywords, etc.)."""
         update_data = {
             "data": {
@@ -647,9 +611,7 @@ class AppStoreConnectAPI:
 
         raise NotFoundError(f"Localization {locale} not found for app {app_id}")
 
-    def update_app_subtitle(
-        self, app_id: str, subtitle: str, locale: str = "en-US"
-    ) -> bool:
+    def update_app_subtitle(self, app_id: str, subtitle: str, locale: str = "en-US") -> bool:
         """Update app subtitle for a specific locale."""
         if len(subtitle) > 30:
             raise ValidationError(
@@ -671,15 +633,11 @@ class AppStoreConnectAPI:
         # Find the right localization
         for loc in localizations["data"]:
             if loc["attributes"]["locale"] == locale:
-                return self.update_app_info_localization(
-                    loc["id"], {"subtitle": subtitle}
-                )
+                return self.update_app_info_localization(loc["id"], {"subtitle": subtitle})
 
         raise NotFoundError(f"Localization {locale} not found for app {app_id}")
 
-    def update_privacy_url(
-        self, app_id: str, privacy_url: str, locale: str = "en-US"
-    ) -> bool:
+    def update_privacy_url(self, app_id: str, privacy_url: str, locale: str = "en-US") -> bool:
         """Update privacy policy URL for a specific locale."""
         # Get app info ID
         app_infos = self.get_app_infos(app_id)
@@ -722,9 +680,7 @@ class AppStoreConnectAPI:
 
         return None
 
-    def update_app_description(
-        self, app_id: str, description: str, locale: str = "en-US"
-    ) -> bool:
+    def update_app_description(self, app_id: str, description: str, locale: str = "en-US") -> bool:
         """Update app description for a specific locale (requires editable version)."""
         if len(description) > 4000:
             raise ValidationError(
@@ -744,9 +700,7 @@ class AppStoreConnectAPI:
         # Get localizations
         localizations = self.get_app_store_version_localizations(version_id)
         if not localizations or "data" not in localizations:
-            raise NotFoundError(
-                f"Could not fetch version localizations for app {app_id}"
-            )
+            raise NotFoundError(f"Could not fetch version localizations for app {app_id}")
 
         # Find the right localization
         for loc in localizations["data"]:
@@ -757,9 +711,7 @@ class AppStoreConnectAPI:
 
         raise NotFoundError(f"Version localization {locale} not found for app {app_id}")
 
-    def update_app_keywords(
-        self, app_id: str, keywords: str, locale: str = "en-US"
-    ) -> bool:
+    def update_app_keywords(self, app_id: str, keywords: str, locale: str = "en-US") -> bool:
         """Update app keywords for a specific locale (requires editable version)."""
         if len(keywords) > 100:
             raise ValidationError(
@@ -779,22 +731,16 @@ class AppStoreConnectAPI:
         # Get localizations
         localizations = self.get_app_store_version_localizations(version_id)
         if not localizations or "data" not in localizations:
-            raise NotFoundError(
-                f"Could not fetch version localizations for app {app_id}"
-            )
+            raise NotFoundError(f"Could not fetch version localizations for app {app_id}")
 
         # Find the right localization
         for loc in localizations["data"]:
             if loc["attributes"]["locale"] == locale:
-                return self.update_app_store_version_localization(
-                    loc["id"], {"keywords": keywords}
-                )
+                return self.update_app_store_version_localization(loc["id"], {"keywords": keywords})
 
         raise NotFoundError(f"Version localization {locale} not found for app {app_id}")
 
-    def update_promotional_text(
-        self, app_id: str, promo_text: str, locale: str = "en-US"
-    ) -> bool:
+    def update_promotional_text(self, app_id: str, promo_text: str, locale: str = "en-US") -> bool:
         """Update promotional text for a specific locale (requires editable version)."""
         if len(promo_text) > 170:
             raise ValidationError(
@@ -814,9 +760,7 @@ class AppStoreConnectAPI:
         # Get localizations
         localizations = self.get_app_store_version_localizations(version_id)
         if not localizations or "data" not in localizations:
-            raise NotFoundError(
-                f"Could not fetch version localizations for app {app_id}"
-            )
+            raise NotFoundError(f"Could not fetch version localizations for app {app_id}")
 
         # Find the right localization
         for loc in localizations["data"]:
@@ -845,9 +789,7 @@ class AppStoreConnectAPI:
             logger.info(f"get_current_metadata: Step 1 - Getting app info for {app_id}")
             start = time.time()
             app_info = self.get_app_info(app_id)
-            logger.info(
-                f"get_current_metadata: Step 1 completed in {time.time() - start:.2f}s"
-            )
+            logger.info(f"get_current_metadata: Step 1 completed in {time.time() - start:.2f}s")
             if app_info and "data" in app_info:
                 metadata["app_info"] = app_info["data"]["attributes"]
                 logger.info("get_current_metadata: app_info retrieved successfully")
@@ -865,14 +807,10 @@ class AppStoreConnectAPI:
 
         # Get app info localizations (name, subtitle, privacy policy)
         try:
-            logger.info(
-                f"get_current_metadata: Step 2 - Getting app infos for {app_id}"
-            )
+            logger.info(f"get_current_metadata: Step 2 - Getting app infos for {app_id}")
             start = time.time()
             app_infos = self.get_app_infos(app_id)
-            logger.info(
-                f"get_current_metadata: Step 2 completed in {time.time() - start:.2f}s"
-            )
+            logger.info(f"get_current_metadata: Step 2 completed in {time.time() - start:.2f}s")
             if app_infos and "data" in app_infos and app_infos["data"]:
                 app_info_id = app_infos["data"][0]["id"]
                 logger.info(
@@ -881,9 +819,7 @@ class AppStoreConnectAPI:
                 )
                 start = time.time()
                 localizations = self.get_app_info_localizations(app_info_id)
-                logger.info(
-                    f"get_current_metadata: Step 3 completed in {time.time() - start:.2f}s"
-                )
+                logger.info(f"get_current_metadata: Step 3 completed in {time.time() - start:.2f}s")
                 if localizations and "data" in localizations:
                     for loc in localizations["data"]:
                         locale = loc["attributes"]["locale"]
@@ -906,14 +842,10 @@ class AppStoreConnectAPI:
 
         # Get version info
         try:
-            logger.info(
-                f"get_current_metadata: Step 4 - Getting app store versions for {app_id}"
-            )
+            logger.info(f"get_current_metadata: Step 4 - Getting app store versions for {app_id}")
             start = time.time()
             versions = self.get_app_store_versions(app_id)
-            logger.info(
-                f"get_current_metadata: Step 4 completed in {time.time() - start:.2f}s"
-            )
+            logger.info(f"get_current_metadata: Step 4 completed in {time.time() - start:.2f}s")
             if versions and "data" in versions:
                 # Get the most recent version
                 if versions["data"]:
@@ -939,32 +871,24 @@ class AppStoreConnectAPI:
                     if version_localizations and "data" in version_localizations:
                         for loc in version_localizations["data"]:
                             locale = loc["attributes"]["locale"]
-                            metadata["version_localizations"][locale] = loc[
-                                "attributes"
-                            ]
+                            metadata["version_localizations"][locale] = loc["attributes"]
                         logger.info(
                             f"get_current_metadata: Found "
                             f"{len(version_localizations['data'])} version localizations"
                         )
                     else:
-                        logger.info(
-                            "get_current_metadata: No version localizations found"
-                        )
+                        logger.info("get_current_metadata: No version localizations found")
                 else:
                     logger.info("get_current_metadata: No version data found")
             else:
                 logger.info("get_current_metadata: No versions response or data")
         except PermissionError as e:
-            logger.info(
-                f"get_current_metadata: PermissionError getting version info: {e}"
-            )
+            logger.info(f"get_current_metadata: PermissionError getting version info: {e}")
             # Re-raise if it's a 403 on app store versions
             if "appStoreVersions" in str(e):
                 raise
         except NotFoundError as e:
-            logger.info(
-                f"get_current_metadata: NotFoundError getting version info: {e}"
-            )
+            logger.info(f"get_current_metadata: NotFoundError getting version info: {e}")
             pass
         except Exception as e:
             logger.error(

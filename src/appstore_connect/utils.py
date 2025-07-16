@@ -93,9 +93,7 @@ def validate_locale(locale: str) -> str:
 
     # Support standard locales (en-US) and extended locales (zh-Hans-CN)
     if not re.match(r"^[a-z]{2}(-[A-Za-z]+)?-[A-Z]{2}$", locale):
-        raise ValidationError(
-            f"Invalid locale format. Expected format: 'en-US', got: {locale}"
-        )
+        raise ValidationError(f"Invalid locale format. Expected format: 'en-US', got: {locale}")
 
     return locale
 
@@ -120,9 +118,7 @@ def validate_version_string(version: str) -> str:
 
     # Basic semantic versioning pattern: X.Y.Z
     if not re.match(r"^\d+\.\d+(\.\d+)?$", version):
-        raise ValidationError(
-            f"Invalid version format. Expected format: 'X.Y.Z', got: {version}"
-        )
+        raise ValidationError(f"Invalid version format. Expected format: 'X.Y.Z', got: {version}")
 
     return version
 
@@ -303,9 +299,7 @@ def sanitize_app_name(name: str) -> str:
     return sanitized or "unnamed_app"
 
 
-def combine_dataframes(
-    dfs: List[pd.DataFrame], sort_by: Optional[str] = None
-) -> pd.DataFrame:
+def combine_dataframes(dfs: List[pd.DataFrame], sort_by: Optional[str] = None) -> pd.DataFrame:
     """
     Combine multiple DataFrames into a single DataFrame.
 

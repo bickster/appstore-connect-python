@@ -40,9 +40,7 @@ def get_integration_credentials():
     missing = [var for var in required_vars if not os.getenv(var)]
 
     if missing:
-        pytest.skip(
-            f"Integration test credentials not configured. Missing: {', '.join(missing)}"
-        )
+        pytest.skip(f"Integration test credentials not configured. Missing: {', '.join(missing)}")
 
     return {
         "key_id": os.getenv("INTEGRATION_TEST_KEY_ID"),
@@ -214,9 +212,7 @@ class TestMetadataManagement:
 
         # Log environment variables to verify they're loaded
         logger.info(f"ENV CHECK - KEY_ID: {os.getenv('INTEGRATION_TEST_KEY_ID')}")
-        logger.info(
-            f"ENV CHECK - VENDOR: {os.getenv('INTEGRATION_TEST_VENDOR_NUMBER')}"
-        )
+        logger.info(f"ENV CHECK - VENDOR: {os.getenv('INTEGRATION_TEST_VENDOR_NUMBER')}")
 
         try:
             # First get apps
@@ -233,16 +229,12 @@ class TestMetadataManagement:
                 logger.info(f"Response keys: {list(apps_result.keys())}")
                 if "data" in apps_result:
                     logger.info(f"Number of apps: {len(apps_result['data'])}")
-                    for i, app in enumerate(
-                        apps_result["data"][:3]
-                    ):  # Show first 3 apps
+                    for i, app in enumerate(apps_result["data"][:3]):  # Show first 3 apps
                         logger.info(
                             f"App {i}: ID={app.get('id')}, "
                             f"Name={app.get('attributes', {}).get('name')}"
                         )
-                        logger.info(
-                            f"  Bundle ID: {app.get('attributes', {}).get('bundleId')}"
-                        )
+                        logger.info(f"  Bundle ID: {app.get('attributes', {}).get('bundleId')}")
                         logger.info(f"  SKU: {app.get('attributes', {}).get('sku')}")
             else:
                 logger.info("apps_result is None")
@@ -255,9 +247,7 @@ class TestMetadataManagement:
 
             # Get metadata for first app
             app_id = apps_result["data"][0]["id"]
-            app_name = (
-                apps_result["data"][0].get("attributes", {}).get("name", "Unknown")
-            )
+            app_name = apps_result["data"][0].get("attributes", {}).get("name", "Unknown")
             logger.info(f"Getting metadata for app_id: {app_id} (Name: {app_name})")
 
             metadata_start = time.time()
@@ -273,9 +263,7 @@ class TestMetadataManagement:
                     f"app store versions: {e}"
                 )
 
-            logger.info(
-                f"get_current_metadata() completed in {time.time() - metadata_start:.2f}s"
-            )
+            logger.info(f"get_current_metadata() completed in {time.time() - metadata_start:.2f}s")
 
             # Log the metadata response
             logger.info("=== METADATA RESPONSE DATA ===")
@@ -305,15 +293,9 @@ class TestMetadataManagement:
 
             # Log version_info
             if metadata.get("version_info"):
-                logger.info(
-                    f"version_info keys: {list(metadata['version_info'].keys())}"
-                )
-                logger.info(
-                    f"  versionString: {metadata['version_info'].get('versionString')}"
-                )
-                logger.info(
-                    f"  appStoreState: {metadata['version_info'].get('appStoreState')}"
-                )
+                logger.info(f"version_info keys: {list(metadata['version_info'].keys())}")
+                logger.info(f"  versionString: {metadata['version_info'].get('versionString')}")
+                logger.info(f"  appStoreState: {metadata['version_info'].get('appStoreState')}")
             else:
                 logger.info("version_info is empty")
 
@@ -350,9 +332,7 @@ class TestMetadataManagement:
             assert isinstance(metadata["version_info"], dict)
             assert isinstance(metadata["version_localizations"], dict)
 
-            logger.info(
-                f"Test completed successfully in {time.time() - start_time:.2f}s total"
-            )
+            logger.info(f"Test completed successfully in {time.time() - start_time:.2f}s total")
 
         except Exception as e:
             logger.error(f"Test failed with error: {type(e).__name__}: {e}")
@@ -520,10 +500,7 @@ class TestErrorScenarios:
             api_client.get_sales_report(old_date)
 
         # Should get a 410 error about report no longer available
-        assert (
-            "410" in str(exc_info.value)
-            or "no longer available" in str(exc_info.value).lower()
-        )
+        assert "410" in str(exc_info.value) or "no longer available" in str(exc_info.value).lower()
 
     def test_malformed_request(self, api_client):
         """Test handling of malformed requests."""
@@ -532,6 +509,4 @@ class TestErrorScenarios:
             api_client.get_sales_report(date.today(), report_type="INVALID_TYPE")
 
         # Should get a 400 error about invalid filter value
-        assert "400" in str(exc_info.value) or "not a valid filter value" in str(
-            exc_info.value
-        )
+        assert "400" in str(exc_info.value) or "not a valid filter value" in str(exc_info.value)

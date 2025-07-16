@@ -55,9 +55,7 @@ def api_client(api_credentials, private_key_content):
     """Create a mocked API client for testing."""
     with patch("pathlib.Path.exists", return_value=True):
         with patch("builtins.open", create=True) as mock_open:
-            mock_open.return_value.__enter__.return_value.read.return_value = (
-                private_key_content
-            )
+            mock_open.return_value.__enter__.return_value.read.return_value = private_key_content
 
             client = AppStoreConnectAPI(
                 key_id=api_credentials["key_id"],
@@ -171,9 +169,7 @@ def sample_app_metadata():
                 },
                 "relationships": {
                     "appInfos": {"data": [{"id": "info123", "type": "appInfos"}]},
-                    "appStoreVersions": {
-                        "data": [{"id": "ver123", "type": "appStoreVersions"}]
-                    },
+                    "appStoreVersions": {"data": [{"id": "ver123", "type": "appStoreVersions"}]},
                 },
             },
             {
@@ -187,9 +183,7 @@ def sample_app_metadata():
                 },
                 "relationships": {
                     "appInfos": {"data": [{"id": "info987", "type": "appInfos"}]},
-                    "appStoreVersions": {
-                        "data": [{"id": "ver987", "type": "appStoreVersions"}]
-                    },
+                    "appStoreVersions": {"data": [{"id": "ver987", "type": "appStoreVersions"}]},
                 },
             },
         ]
@@ -263,9 +257,7 @@ def integration_test_credentials():
     missing = [var for var in required_vars if not os.getenv(var)]
 
     if missing:
-        pytest.skip(
-            f"Integration test credentials not configured. Missing: {', '.join(missing)}"
-        )
+        pytest.skip(f"Integration test credentials not configured. Missing: {', '.join(missing)}")
 
     return {
         "key_id": os.getenv("INTEGRATION_TEST_KEY_ID"),

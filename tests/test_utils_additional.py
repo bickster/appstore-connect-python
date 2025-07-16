@@ -35,9 +35,7 @@ class TestUtilsEdgeCases:
         assert get_app_platform("com.company.app.watch") == "watchos"
 
         # Test edge case with multiple indicators (mac matches first in our implementation)
-        assert (
-            get_app_platform("com.company.tv.mac") == "macos"
-        )  # mac matches before tv
+        assert get_app_platform("com.company.tv.mac") == "macos"  # mac matches before tv
 
         # Test with None - should handle TypeError
         try:
@@ -139,9 +137,7 @@ class TestUtilsEdgeCases:
         assert validate_vendor_number("00012345") == "00012345"
 
         # Test locale with region variant
-        assert (
-            validate_locale("zh-Hans-CN") == "zh-Hans-CN"
-        )  # Chinese Simplified for China
+        assert validate_locale("zh-Hans-CN") == "zh-Hans-CN"  # Chinese Simplified for China
 
         # Test version string with build number (should fail our X.Y.Z validation)
         with pytest.raises(ValidationError):

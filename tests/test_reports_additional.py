@@ -26,9 +26,7 @@ def report_processor(mock_api):
 class TestReportProcessorEdgeCases:
     """Test edge cases in ReportProcessor."""
 
-    def test_get_sales_summary_with_subscription_events(
-        self, report_processor, mock_api
-    ):
+    def test_get_sales_summary_with_subscription_events(self, report_processor, mock_api):
         """Test sales summary including subscription event data."""
         # Mock fetch_multiple_days to return all report types
         mock_api.fetch_multiple_days.return_value = {
@@ -76,9 +74,7 @@ class TestReportProcessorEdgeCases:
         assert summary["summary"]["total_units"] == 30
         assert summary["summary"]["total_revenue"] == 210.0
 
-    def test_get_subscription_analysis_all_reports_present(
-        self, report_processor, mock_api
-    ):
+    def test_get_subscription_analysis_all_reports_present(self, report_processor, mock_api):
         """Test subscription analysis with both reports available."""
         # Mock data with matching app IDs
         subscriptions_df = pd.DataFrame(
@@ -146,9 +142,7 @@ class TestReportProcessorEdgeCases:
         result = report_processor.get_app_performance_ranking(days=1)
         assert result is not None
 
-    def test_export_summary_report_with_all_sections(
-        self, report_processor, mock_api, tmp_path
-    ):
+    def test_export_summary_report_with_all_sections(self, report_processor, mock_api, tmp_path):
         """Test exporting comprehensive summary report."""
         # Mock complete data
         sales_df = pd.DataFrame(
@@ -216,13 +210,9 @@ class TestReportProcessorEdgeCases:
         aggregated = report_processor._aggregate_by_app(sales_df)
 
         assert len(aggregated) == 2
+        assert aggregated[aggregated["Apple Identifier"] == "123"]["Units"].iloc[0] == 30
         assert (
-            aggregated[aggregated["Apple Identifier"] == "123"]["Units"].iloc[0] == 30
-        )
-        assert (
-            aggregated[aggregated["Apple Identifier"] == "123"][
-                "Developer Proceeds"
-            ].iloc[0]
+            aggregated[aggregated["Apple Identifier"] == "123"]["Developer Proceeds"].iloc[0]
             == 210.0
         )
 

@@ -84,9 +84,7 @@ class TestReportProcessor:
         assert result["by_app"] == {}
         assert result["by_country"] == {}
 
-    def test_get_sales_summary_with_data(
-        self, report_processor, mock_api, sample_sales_df
-    ):
+    def test_get_sales_summary_with_data(self, report_processor, mock_api, sample_sales_df):
         """Test sales summary with actual data."""
         mock_api.fetch_multiple_days.return_value = {"sales": [sample_sales_df]}
 
@@ -187,9 +185,7 @@ class TestReportProcessor:
         with patch.object(
             report_processor, "get_sales_summary", side_effect=mock_get_sales_summary
         ):
-            result = report_processor.compare_periods(
-                current_days=30, comparison_days=30
-            )
+            result = report_processor.compare_periods(current_days=30, comparison_days=30)
 
         # Check that periods are defined
         assert "periods" in result
@@ -220,13 +216,9 @@ class TestReportProcessor:
             }
         }
 
-        with patch.object(
-            report_processor, "get_sales_summary", return_value=mock_summary
-        ):
+        with patch.object(report_processor, "get_sales_summary", return_value=mock_summary):
             # Test ranking by revenue
-            result = report_processor.get_app_performance_ranking(
-                days=30, metric="revenue"
-            )
+            result = report_processor.get_app_performance_ranking(days=30, metric="revenue")
 
         assert len(result) == 3
         assert result[0]["rank"] == 1
@@ -255,12 +247,8 @@ class TestReportProcessor:
             }
         }
 
-        with patch.object(
-            report_processor, "get_sales_summary", return_value=mock_summary
-        ):
-            result = report_processor.get_app_performance_ranking(
-                days=30, metric="units"
-            )
+        with patch.object(report_processor, "get_sales_summary", return_value=mock_summary):
+            result = report_processor.get_app_performance_ranking(days=30, metric="units")
 
         assert result[0]["app_id"] == "789"  # Highest units (100)
         assert result[1]["app_id"] == "456"  # Second highest units (75)
@@ -272,14 +260,10 @@ class TestReportProcessor:
 
         # Mock a summary with some data
         mock_summary = {
-            "by_app": {
-                "123": {"name": "App A", "revenue": 100.0, "units": 50, "countries": 3}
-            }
+            "by_app": {"123": {"name": "App A", "revenue": 100.0, "units": 50, "countries": 3}}
         }
 
-        with patch.object(
-            report_processor, "get_sales_summary", return_value=mock_summary
-        ):
+        with patch.object(report_processor, "get_sales_summary", return_value=mock_summary):
             with pytest.raises(ValidationError):
                 report_processor.get_app_performance_ranking(days=30, metric="invalid")
 
@@ -305,9 +289,7 @@ class TestReportProcessor:
             },
         }
 
-        with patch.object(
-            report_processor, "get_sales_summary", return_value=mock_summary
-        ):
+        with patch.object(report_processor, "get_sales_summary", return_value=mock_summary):
             report_processor.export_summary_report(
                 output_path="/tmp/test.csv", days=30, include_details=True
             )

@@ -48,16 +48,12 @@ class TestAppInfoMethods:
         }
         mock_success_response.json.return_value = app_data
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_success_response
-        ):
+        with patch.object(api_client, "_make_request", return_value=mock_success_response):
             with patch.object(api_client, "_generate_token", return_value="token"):
                 result = api_client.get_app_info("123456")
 
                 assert result == app_data
-                api_client._make_request.assert_called_with(
-                    method="GET", endpoint="/apps/123456"
-                )
+                api_client._make_request.assert_called_with(method="GET", endpoint="/apps/123456")
 
     def test_get_app_info_not_found(self, api_client):
         """Test app info when app doesn't exist."""
@@ -83,9 +79,7 @@ class TestAppInfoMethods:
         }
         mock_success_response.json.return_value = app_infos_data
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_success_response
-        ):
+        with patch.object(api_client, "_make_request", return_value=mock_success_response):
             with patch.object(api_client, "_generate_token", return_value="token"):
                 result = api_client.get_app_infos("123456")
 
@@ -111,9 +105,7 @@ class TestAppInfoMethods:
         }
         mock_success_response.json.return_value = localizations_data
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_success_response
-        ):
+        with patch.object(api_client, "_make_request", return_value=mock_success_response):
             with patch.object(api_client, "_generate_token", return_value="token"):
                 result = api_client.get_app_info_localizations("info123")
 
@@ -126,15 +118,11 @@ class TestAppInfoMethods:
 class TestAppInfoUpdates:
     """Test app info update methods."""
 
-    def test_update_app_info_localization_success(
-        self, api_client, mock_success_response
-    ):
+    def test_update_app_info_localization_success(self, api_client, mock_success_response):
         """Test successful app info localization update."""
         update_data = {"name": "New App Name"}
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_success_response
-        ):
+        with patch.object(api_client, "_make_request", return_value=mock_success_response):
             with patch.object(api_client, "_generate_token", return_value="token"):
                 result = api_client.update_app_info_localization("loc123", update_data)
 
@@ -158,9 +146,7 @@ class TestAppInfoUpdates:
 
         with patch.object(api_client, "_make_request", return_value=mock_response):
             with patch.object(api_client, "_generate_token", return_value="token"):
-                result = api_client.update_app_info_localization(
-                    "loc123", {"name": "New"}
-                )
+                result = api_client.update_app_info_localization("loc123", {"name": "New"})
 
                 assert result is False
 
@@ -196,9 +182,7 @@ class TestAppStoreVersionMethods:
                 assert sent_data["data"]["type"] == "appStoreVersions"
                 assert sent_data["data"]["attributes"]["versionString"] == "2.0"
                 assert sent_data["data"]["attributes"]["platform"] == "IOS"
-                assert (
-                    sent_data["data"]["relationships"]["app"]["data"]["id"] == "123456"
-                )
+                assert sent_data["data"]["relationships"]["app"]["data"]["id"] == "123456"
 
     def test_create_app_store_version_failure(self, api_client):
         """Test failed version creation."""
@@ -227,9 +211,7 @@ class TestAppStoreVersionMethods:
         }
         mock_success_response.json.return_value = versions_data
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_success_response
-        ):
+        with patch.object(api_client, "_make_request", return_value=mock_success_response):
             with patch.object(api_client, "_generate_token", return_value="token"):
                 result = api_client.get_app_store_versions("123456")
 
@@ -238,13 +220,9 @@ class TestAppStoreVersionMethods:
                 # Check request params
                 call_args = api_client._make_request.call_args
                 assert call_args[1]["params"]["filter[app]"] == "123456"
-                assert (
-                    call_args[1]["params"]["include"] == "appStoreVersionLocalizations"
-                )
+                assert call_args[1]["params"]["include"] == "appStoreVersionLocalizations"
 
-    def test_get_app_store_version_localizations(
-        self, api_client, mock_success_response
-    ):
+    def test_get_app_store_version_localizations(self, api_client, mock_success_response):
         """Test getting version localizations."""
         localizations_data = {
             "data": [
@@ -257,27 +235,19 @@ class TestAppStoreVersionMethods:
         }
         mock_success_response.json.return_value = localizations_data
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_success_response
-        ):
+        with patch.object(api_client, "_make_request", return_value=mock_success_response):
             with patch.object(api_client, "_generate_token", return_value="token"):
                 result = api_client.get_app_store_version_localizations("ver123")
 
                 assert result == localizations_data
 
-    def test_update_app_store_version_localization(
-        self, api_client, mock_success_response
-    ):
+    def test_update_app_store_version_localization(self, api_client, mock_success_response):
         """Test updating version localization."""
         update_data = {"description": "New description"}
 
-        with patch.object(
-            api_client, "_make_request", return_value=mock_success_response
-        ):
+        with patch.object(api_client, "_make_request", return_value=mock_success_response):
             with patch.object(api_client, "_generate_token", return_value="token"):
-                result = api_client.update_app_store_version_localization(
-                    "verloc123", update_data
-                )
+                result = api_client.update_app_store_version_localization("verloc123", update_data)
 
                 assert result is True
 
@@ -350,9 +320,7 @@ class TestHighLevelUpdateMethods:
         localizations_response = Mock()
         localizations_response.status_code = 200
         localizations_response.json.return_value = {
-            "data": [
-                {"id": "loc123", "attributes": {"locale": "fr-FR"}}  # Different locale
-            ]
+            "data": [{"id": "loc123", "attributes": {"locale": "fr-FR"}}]  # Different locale
         }
 
         with patch.object(
@@ -418,9 +386,7 @@ class TestHighLevelUpdateMethods:
 
         with patch.object(api_client, "_make_request", side_effect=responses):
             with patch.object(api_client, "_generate_token", return_value="token"):
-                result = api_client.update_privacy_url(
-                    "123456", "https://example.com/privacy"
-                )
+                result = api_client.update_privacy_url("123456", "https://example.com/privacy")
 
                 assert result is True
 
@@ -481,9 +447,7 @@ class TestEditableVersionMethods:
                 "data": [{"id": f"ver_{state}", "attributes": {"appStoreState": state}}]
             }
 
-            with patch.object(
-                api_client, "_make_request", return_value=versions_response
-            ):
+            with patch.object(api_client, "_make_request", return_value=versions_response):
                 with patch.object(api_client, "_generate_token", return_value="token"):
                     result = api_client.get_editable_version("123456")
 
@@ -507,27 +471,21 @@ class TestEditableVersionMethods:
         update_response = Mock()
         update_response.status_code = 200
 
-        with patch.object(
-            api_client, "get_editable_version", return_value=editable_version
-        ):
+        with patch.object(api_client, "get_editable_version", return_value=editable_version):
             with patch.object(
                 api_client,
                 "_make_request",
                 side_effect=[localizations_response, update_response],
             ):
                 with patch.object(api_client, "_generate_token", return_value="token"):
-                    result = api_client.update_app_description(
-                        "123456", "New app description"
-                    )
+                    result = api_client.update_app_description("123456", "New app description")
 
                     assert result is True
 
     def test_update_app_description_too_long(self, api_client):
         """Test description length validation."""
         with pytest.raises(ValidationError) as exc_info:
-            api_client.update_app_description(
-                "123456", "x" * 4001  # Exceeds 4000 char limit
-            )
+            api_client.update_app_description("123456", "x" * 4001)  # Exceeds 4000 char limit
 
         assert "Description too long" in str(exc_info.value)
         assert "Maximum is 4000 characters" in str(exc_info.value)
@@ -556,27 +514,21 @@ class TestEditableVersionMethods:
         update_response = Mock()
         update_response.status_code = 200
 
-        with patch.object(
-            api_client, "get_editable_version", return_value=editable_version
-        ):
+        with patch.object(api_client, "get_editable_version", return_value=editable_version):
             with patch.object(
                 api_client,
                 "_make_request",
                 side_effect=[localizations_response, update_response],
             ):
                 with patch.object(api_client, "_generate_token", return_value="token"):
-                    result = api_client.update_app_keywords(
-                        "123456", "keyword1,keyword2,keyword3"
-                    )
+                    result = api_client.update_app_keywords("123456", "keyword1,keyword2,keyword3")
 
                     assert result is True
 
     def test_update_app_keywords_too_long(self, api_client):
         """Test keywords length validation."""
         with pytest.raises(ValidationError) as exc_info:
-            api_client.update_app_keywords(
-                "123456", "x" * 101  # Exceeds 100 char limit
-            )
+            api_client.update_app_keywords("123456", "x" * 101)  # Exceeds 100 char limit
 
         assert "Keywords too long" in str(exc_info.value)
 
@@ -596,9 +548,7 @@ class TestEditableVersionMethods:
         update_response = Mock()
         update_response.status_code = 200
 
-        with patch.object(
-            api_client, "get_editable_version", return_value=editable_version
-        ):
+        with patch.object(api_client, "get_editable_version", return_value=editable_version):
             with patch.object(
                 api_client,
                 "_make_request",
@@ -614,9 +564,7 @@ class TestEditableVersionMethods:
     def test_update_promotional_text_too_long(self, api_client):
         """Test promotional text length validation."""
         with pytest.raises(ValidationError) as exc_info:
-            api_client.update_promotional_text(
-                "123456", "x" * 171  # Exceeds 170 char limit
-            )
+            api_client.update_promotional_text("123456", "x" * 171)  # Exceeds 170 char limit
 
         assert "Promotional text too long" in str(exc_info.value)
 
@@ -668,9 +616,7 @@ class TestGetCurrentMetadata:
         version_localizations_response = Mock()
         version_localizations_response.status_code = 200
         version_localizations_response.json.return_value = {
-            "data": [
-                {"attributes": {"locale": "en-US", "description": "App description"}}
-            ]
+            "data": [{"attributes": {"locale": "en-US", "description": "App description"}}]
         }
 
         responses = [
@@ -703,9 +649,7 @@ class TestGetCurrentMetadata:
         # App info succeeds
         app_info_response = Mock()
         app_info_response.status_code = 200
-        app_info_response.json.return_value = {
-            "data": {"attributes": {"name": "Test App"}}
-        }
+        app_info_response.json.return_value = {"data": {"attributes": {"name": "Test App"}}}
 
         # App infos fails (404)
         app_infos_response = Mock()
