@@ -437,7 +437,7 @@ validate_setup()
 If you're still experiencing issues:
 
 1. **Check the GitHub Issues**
-   - Search [existing issues](https://github.com/chrisbick/appstore-connect-client/issues)
+   - Search [existing issues](https://github.com/bickster/appstore-connect-python/issues)
    - Look for similar problems and solutions
 
 2. **Create a Detailed Bug Report**

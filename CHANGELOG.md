@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2025-01-16
+
+### Fixed
+- Corrected all GitHub repository URLs from chrisbick/appstore-connect-client to bickster/appstore-connect-python
+- Updated PyPI package metadata to point to correct GitHub repository
+- Fixed documentation links to use correct repository URL
+
 ## [1.0.3] - 2025-01-16
 
 ### Fixed
@@ -252,7 +259,7 @@ pip install appstore-connect-client[dev]
 
 #### From Source
 ```bash
-git clone https://github.com/chrisbick/appstore-connect-client.git
+git clone https://github.com/bickster/appstore-connect-python.git
 cd appstore-connect-client
 pip install -e .[dev]
 ```

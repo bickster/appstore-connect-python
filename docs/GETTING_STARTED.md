@@ -370,5 +370,5 @@ If you encounter issues:
 1. Check the [troubleshooting guide](TROUBLESHOOTING.md)
 2. Review your API key permissions in App Store Connect
 3. Verify your credentials and file paths
-4. Check the [GitHub issues](https://github.com/chrisbick/appstore-connect-client/issues) for known problems
+4. Check the [GitHub issues](https://github.com/bickster/appstore-connect-python/issues) for known problems
 5. Create a new issue with detailed error information

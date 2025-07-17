@@ -3,7 +3,7 @@
 [![PyPI version](https://badge.fury.io/py/appstore-connect-client.svg)](https://badge.fury.io/py/appstore-connect-client)
 [![Python versions](https://img.shields.io/pypi/pyversions/appstore-connect-client.svg)](https://pypi.org/project/appstore-connect-client/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Test Coverage](https://img.shields.io/badge/coverage-80%25-green.svg)](https://github.com/chrisbick/appstore-connect-client)
+[![Test Coverage](https://img.shields.io/badge/coverage-80%25-green.svg)](https://github.com/bickster/appstore-connect-python)
 
 A comprehensive Python client for the Apple App Store Connect API, providing simple and intuitive interfaces for sales reporting, app metadata management, and advanced analytics.
 
@@ -246,9 +246,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Support
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/chrisbick/appstore-connect-client/issues)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/bickster/appstore-connect-python/issues)
 - 📖 **Documentation**: [Read the Docs](https://appstore-connect-client.readthedocs.io/)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/chrisbick/appstore-connect-client/discussions)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/bickster/appstore-connect-python/discussions)
 
 ## Changelog
 

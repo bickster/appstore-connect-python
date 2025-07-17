@@ -16,7 +16,7 @@ setup(
     description="A comprehensive Python client for the Apple App Store Connect API",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/chrisbick/appstore-connect-client",
+    url="https://github.com/bickster/appstore-connect-python",
     packages=find_packages(where="src"),
     package_dir={"": "src"},
     classifiers=[
@@ -38,8 +38,8 @@ setup(
     install_requires=requirements,
     keywords="apple, app store connect, api, sales, metadata, ios, apps",
     project_urls={
-        "Bug Reports": "https://github.com/chrisbick/appstore-connect-client/issues",
-        "Source": "https://github.com/chrisbick/appstore-connect-client",
+        "Bug Reports": "https://github.com/bickster/appstore-connect-python/issues",
+        "Source": "https://github.com/bickster/appstore-connect-python",
         "Documentation": "https://appstore-connect-client.readthedocs.io/",
     },
 )

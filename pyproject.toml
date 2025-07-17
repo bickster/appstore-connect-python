@@ -36,10 +36,10 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/chrisbick/appstore-connect-client"
-Documentation = "https://appstore-connect-client.readthedocs.io/"
-Repository = "https://github.com/chrisbick/appstore-connect-client"
-"Bug Tracker" = "https://github.com/chrisbick/appstore-connect-client/issues"
+Homepage = "https://github.com/bickster/appstore-connect-python"
+Documentation = "https://github.com/bickster/appstore-connect-python/blob/main/README.md"
+Repository = "https://github.com/bickster/appstore-connect-python"
+"Bug Tracker" = "https://github.com/bickster/appstore-connect-python/issues"
 
 [project.optional-dependencies]
 dev = [
