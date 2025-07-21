@@ -56,7 +56,6 @@ dev = [
 ]
 
 [tool.setuptools.packages.find]
-where = ["src"]
 include = ["appstore_connect*"]
 
 [tool.black]

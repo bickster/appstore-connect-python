@@ -10,7 +10,7 @@ include tox.ini
 include setup.py
 include pyproject.toml
 include Makefile
-recursive-include src/appstore_connect *.py
+recursive-include appstore_connect *.py
 recursive-include tests *.py
 recursive-include examples *.py
 recursive-include docs *.md
